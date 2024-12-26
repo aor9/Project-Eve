@@ -3,9 +3,9 @@ DerivedDataCache
 Intermediate
 Saved
 Build
-/Assets
-/Maps
-/StarterContent
+Content/Assets
+Content/Maps
+Content/StarterContent
 
 .vscode
 .vs
