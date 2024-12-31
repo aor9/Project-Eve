@@ -7,6 +7,7 @@ Content/Assets
 Content/Maps
 Content/StarterContent
 
+.idea
 .vscode
 .vs
 *.VC.db
