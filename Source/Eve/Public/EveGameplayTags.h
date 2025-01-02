@@ -2,14 +2,12 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "NativeGameplayTags.h"
 
 /**
  * 
  */
-class EVE_API EveGameplayTags
+namespace EveGameplayTags
 {
-public:
-	EveGameplayTags();
-	~EveGameplayTags();
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_Move);
 };

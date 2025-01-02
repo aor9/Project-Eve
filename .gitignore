@@ -6,6 +6,13 @@ Build
 Content/Assets
 Content/Maps
 Content/StarterContent
+Content/__ExternalActors__
+Content/__ExternalObjects__
+Content/Mixamo
+Content/TopDown
+Content/LevelPrototyping
+Content/Characters
+Content/Cursor
 
 .idea
 .vscode

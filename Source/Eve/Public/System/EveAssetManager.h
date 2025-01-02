@@ -51,3 +51,23 @@ private:
 	TMap<FName, TObjectPtr<const UObject>> NameToLoadedAsset;
 	
 };
+
+template<typename AssetType>
+AssetType* UEveAssetManager::GetAssetByName(const FName& AssetName)
+{
+	UEveAssetData* AssetData = Get().LoadedAssetData;
+	check(AssetData);
+
+	AssetType* LoadedAsset = nullptr;
+	const FSoftObjectPath& AssetPath = AssetData->GetAssetPathByName(AssetName);
+	if (AssetPath.IsValid())
+	{
+		LoadedAsset = Cast<AssetType>(AssetPath.ResolveObject());
+		if (LoadedAsset == nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Attempted sync loading because asset hadn't loaded yet [%s]."), *AssetPath.ToString());
+			LoadedAsset = Cast<AssetType>(AssetPath.TryLoad());
+		}
+	}
+	return LoadedAsset;
+}

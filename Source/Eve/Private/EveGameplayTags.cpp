@@ -4,10 +4,8 @@
 #include "EveGameplayTags.h"
 
 
-EveGameplayTags::EveGameplayTags()
+namespace EveGameplayTags
 {
-}
+	UE_DEFINE_GAMEPLAY_TAG(Input_Action_Move, "Input.Action.Move");
 
-EveGameplayTags::~EveGameplayTags()
-{
 }

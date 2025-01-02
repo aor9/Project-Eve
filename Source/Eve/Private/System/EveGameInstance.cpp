@@ -3,7 +3,7 @@
 
 #include "System/EveGameInstance.h"
 
-#include "EveAssetManager.h"
+#include "System/EveAssetManager.h" 
 
 
 UEveGameInstance::UEveGameInstance(const FObjectInitializer& ObjectInitializer)
