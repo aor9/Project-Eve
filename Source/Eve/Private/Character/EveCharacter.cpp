@@ -18,9 +18,18 @@ AEveCharacter::AEveCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+	Camera->bUsePawnControlRotation = false;
 }
 
 void AEveCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void AEveCharacter::RotateToMouseDirection(const FVector2D& MouseNormal)
+{
+	float YawRotation = FMath::Atan2(MouseNormal.Y, MouseNormal.X) * (180.0f / PI);
+	FRotator NewRotation = FRotator(0.0f, YawRotation, 0.0f);
+	
+	SetActorRotation(NewRotation);
 }

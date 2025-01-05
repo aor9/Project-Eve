@@ -17,6 +17,7 @@ public:
 	AEveCharacter();
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void RotateToMouseDirection(const FVector2D& MouseNormal);
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

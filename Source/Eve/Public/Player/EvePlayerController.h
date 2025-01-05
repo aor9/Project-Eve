@@ -26,4 +26,12 @@ protected:
 
 private:
 	void Input_Move(const FInputActionValue& InputValue);
+	void GetMouseNormal();
+	
+private:
+	UPROPERTY()
+	APawn* ControlledPawn;
+	
+	int32 ViewportSizeX;
+	int32 ViewportSizeY;
 };

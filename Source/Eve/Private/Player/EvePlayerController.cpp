@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "System/EveAssetManager.h"
 #include "EveGameplayTags.h"
+#include "Character/EveCharacter.h"
 #include "Data/EveInputData.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -41,6 +42,8 @@ void AEvePlayerController::BeginPlay()
 void AEvePlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	GetMouseNormal();
 }
 
 void AEvePlayerController::SetupInputComponent()
@@ -60,7 +63,11 @@ void AEvePlayerController::Input_Move(const FInputActionValue& InputValue)
 {
 	const FVector2D InputAxisVector = InputValue.Get<FVector2D>();
 
-	APawn* ControlledPawn = GetPawn();
+	if(ControlledPawn == nullptr)
+	{
+		ControlledPawn = GetPawn();
+	}
+	
 	if (!ControlledPawn) return;
 	
 	const FVector ForwardDirection = FVector(1.0f, 0.0f, 0.0f);
@@ -68,4 +75,22 @@ void AEvePlayerController::Input_Move(const FInputActionValue& InputValue)
 	
 	ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.X);
 	ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.Y);
+}
+
+void AEvePlayerController::GetMouseNormal()
+{
+	FVector2D MousePosition;
+
+	if (GetMousePosition(MousePosition.X, MousePosition.Y))
+	{
+		GetViewportSize(ViewportSizeX, ViewportSizeY);
+		FVector2D ScreenCenter = FVector2D(ViewportSizeX * 0.5f, ViewportSizeY * 0.5f);
+		FVector2D MouseDelta = MousePosition - ScreenCenter;
+		FVector2D MouseNormalFromCenter = MouseDelta.GetSafeNormal();
+
+		if (AEveCharacter* ControlledCharacter = Cast<AEveCharacter>(GetPawn()))
+		{
+			ControlledCharacter->RotateToMouseDirection(MouseNormalFromCenter);
+		}
+	}
 }
