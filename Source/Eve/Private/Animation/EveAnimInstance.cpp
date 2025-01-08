@@ -48,3 +48,8 @@ void UEveAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	bShouldMove = EveCharacter->GetCharacterMovement()->GetCurrentAcceleration().Size() > 0.f ? true : false;
 
 }
+
+void UEveAnimInstance::AnimNotify_RollEnd()
+{
+	bIsRolling = false;
+}

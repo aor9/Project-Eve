@@ -20,6 +20,12 @@ public:
 
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	
+	UPROPERTY(BlueprintReadWrite, Category=Movement, meta=(AllowPrivateAccess = "true"))
+	bool bIsRolling = false;
+
+	UFUNCTION()
+	void AnimNotify_RollEnd();
 
 private:
 	UPROPERTY(BlueprintReadOnly, Category=Character, meta=(AllowPrivateAccess = "true"))
@@ -54,5 +60,7 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, Category=Movement, meta=(AllowPrivateAccess = "true"))
 	bool bShouldMove = false;
+
+public:
 	
 };

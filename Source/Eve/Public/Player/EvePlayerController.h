@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "EvePlayerController.generated.h"
 
+class UEveAnimInstance;
 struct FInputActionValue;
 
 /**
@@ -21,17 +22,20 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
 
 private:
 	void Input_Move(const FInputActionValue& InputValue);
+	void Input_Roll(const FInputActionValue& InputValue);
 	void GetMouseNormal();
 	
 private:
 	UPROPERTY()
 	APawn* ControlledPawn;
+	UEveAnimInstance* EveAnimInstance;
 	
 	int32 ViewportSizeX;
 	int32 ViewportSizeY;
+	FVector LastMoveDirection;
 };
