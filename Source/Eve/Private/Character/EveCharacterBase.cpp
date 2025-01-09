@@ -10,6 +10,11 @@ AEveCharacterBase::AEveCharacterBase()
 
 }
 
+UAbilitySystemComponent* AEveCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 void AEveCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

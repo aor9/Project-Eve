@@ -4,29 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "GameFramework/Character.h"
-#include "EveCharacterBase.generated.h"
+#include "GameFramework/PlayerState.h"
+#include "EvePlayerState.generated.h"
 
 class UAbilitySystemComponent;
 class UAttributeSet;
-
+/**
+ * 
+ */
 UCLASS()
-class EVE_API AEveCharacterBase : public ACharacter, public IAbilitySystemInterface
+class EVE_API AEvePlayerState : public APlayerState, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
-
+	
 public:
-	AEveCharacterBase();
+	AEvePlayerState();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
 protected:
-	virtual void BeginPlay() override;
-
-
+	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+	
 };

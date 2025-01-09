@@ -2,9 +2,12 @@
 
 
 #include "Character/EveCharacter.h"
+
+#include "AbilitySystemComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Player/EvePlayerState.h"
 
 
 AEveCharacter::AEveCharacter()
@@ -26,10 +29,35 @@ void AEveCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AEveCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// init ability info for the server
+	InitAbilityActorInfo();
+}
+
+void AEveCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	// init ability info for the client
+	InitAbilityActorInfo();
+}
+
 void AEveCharacter::RotateToMouseDirection(const FVector2D& MouseNormal)
 {
 	float YawRotation = FMath::Atan2(MouseNormal.Y, MouseNormal.X) * (180.0f / PI);
 	FRotator NewRotation = FRotator(0.0f, YawRotation, 0.0f);
 	
 	SetActorRotation(NewRotation);
+}
+
+void AEveCharacter::InitAbilityActorInfo()
+{
+	AEvePlayerState* EvePlayerState = GetPlayerState<AEvePlayerState>();
+	check(EvePlayerState);
+	EvePlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(EvePlayerState, this);
+	AbilitySystemComponent = EvePlayerState->GetAbilitySystemComponent();
+	AttributeSet = EvePlayerState->GetAttributeSet();
 }
