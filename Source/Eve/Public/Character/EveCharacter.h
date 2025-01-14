@@ -6,6 +6,10 @@
 #include "Character/EveCharacterBase.h"
 #include "EveCharacter.generated.h"
 
+class UNiagaraComponent;
+class UNiagaraSystem;
+class USpringArmComponent;
+class UCameraComponent;
 /**
  * 
  */
@@ -21,13 +25,22 @@ public:
 	virtual void OnRep_PlayerState() override;
 	
 	void RotateToMouseDirection(const FVector2D& MouseNormal);
+
+	UPROPERTY(EditAnywhere, Category = "Snowing")
+	UNiagaraSystem* SnowingEffect;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Snowing")
+	UNiagaraComponent* NiagaraSnowComponent = nullptr;
 	
 protected:
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class USpringArmComponent> SpringArm;
+	TObjectPtr<USpringArmComponent> SpringArm;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class UCameraComponent> Camera;
+	TObjectPtr<UCameraComponent> Camera;
 
 private:
 	void InitAbilityActorInfo();

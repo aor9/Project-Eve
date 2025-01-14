@@ -4,6 +4,8 @@
 #include "Character/EveCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -12,7 +14,6 @@
 
 AEveCharacter::AEveCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
@@ -23,6 +24,40 @@ AEveCharacter::AEveCharacter()
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
 }
+
+void AEveCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	NiagaraSnowComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+		SnowingEffect,
+		SpringArm,
+		NAME_None,
+		FVector(0.f, -50.f, 0.f),
+		FRotator::ZeroRotator,
+		EAttachLocation::Type::KeepWorldPosition,
+		true
+		);
+	
+	if(NiagaraSnowComponent)
+	{
+		// TODO : 날씨를 조절하는 클래스에서 바람 세기, 눈이 얼마나 내리는지 등 가져오기
+		NiagaraSnowComponent->SetFloatParameter(FName("WindPower"), -100.f);
+		NiagaraSnowComponent->SetFloatParameter(FName("SnowRate"), 300.f);	
+	}
+}
+
+void AEveCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (NiagaraSnowComponent && Camera)
+	{
+		FVector CameraLocation = Camera->GetComponentLocation();
+		NiagaraSnowComponent->SetWorldLocation(CameraLocation + FVector(0.f, 0.f, 300.f));
+	}
+}
+
 
 void AEveCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
