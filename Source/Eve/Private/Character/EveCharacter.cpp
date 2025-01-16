@@ -6,10 +6,13 @@
 #include "AbilitySystemComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "AbilitySystem/EveAttributeSet.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Player/EvePlayerController.h"
 #include "Player/EvePlayerState.h"
+#include "UI/HUD/EveHUD.h"
 
 
 AEveCharacter::AEveCharacter()
@@ -58,7 +61,6 @@ void AEveCharacter::Tick(float DeltaSeconds)
 	}
 }
 
-
 void AEveCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -95,4 +97,13 @@ void AEveCharacter::InitAbilityActorInfo()
 	EvePlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(EvePlayerState, this);
 	AbilitySystemComponent = EvePlayerState->GetAbilitySystemComponent();
 	AttributeSet = EvePlayerState->GetAttributeSet();
+
+	if(AEvePlayerController* EvePlayerController = Cast<AEvePlayerController>(GetController()))
+	{
+		if(AEveHUD* EveHUD = Cast<AEveHUD>(EvePlayerController->GetHUD()))
+		{
+			EveHUD->InitOverlay(EvePlayerController, EvePlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
+	
 }

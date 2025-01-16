@@ -9,15 +9,15 @@
 
 UEveAttributeSet::UEveAttributeSet()
 {
-	InitHealth(100.f);
+	InitHealth(50.f);
 	InitMaxHealth(100.f);
-	InitBodyTemperature(36.5f);
-	InitMaxBodyTemperature(42.f);
-	InitHunger(100.f);
-	InitMaxHunger(100.f);
+	InitBodyTemperature(0.5f);
+	InitMaxBodyTemperature(1.f);
+	InitHunger(0.5f);
+	InitMaxHunger(1.f);
 	
-	InitStamina(100.f);
-	InitMaxStamina(100.f);
+	InitStamina(1.f);
+	InitMaxStamina(1.f);
 }
 
 void UEveAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
