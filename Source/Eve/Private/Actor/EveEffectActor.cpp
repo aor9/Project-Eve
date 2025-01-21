@@ -128,20 +128,16 @@ void AEveEffectActor::OnEndOverlap(AActor* TargetActor)
 	{
 		UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 		if (!IsValid(TargetASC)) return;
-
-		TArray<FActiveGameplayEffectHandle> HandlesToRemove;
-		for (TTuple<FActiveGameplayEffectHandle, UAbilitySystemComponent*> HandlePair : ActiveEffectHandles)
+		
+		if (!InfiniteGameplayEffectClass)
 		{
-			if (TargetASC == HandlePair.Value)
-			{
-				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key, 1);
-				HandlesToRemove.Add(HandlePair.Key);
-			}
+			return;
 		}
-		for (FActiveGameplayEffectHandle& Handle : HandlesToRemove)
-		{
-			ActiveEffectHandles.FindAndRemoveChecked(Handle);
-		}
+		
+		TargetASC->RemoveActiveGameplayEffectBySourceEffect(InfiniteGameplayEffectClass, TargetASC, 1);
+		
+		ActiveEffectHandles.Empty();
 	}
+
 }
 
