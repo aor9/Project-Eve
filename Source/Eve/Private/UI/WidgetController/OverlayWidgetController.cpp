@@ -3,6 +3,8 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 
+#include "AbilitySystem/EveAbilitySystemComponent.h"
+
 
 void UOverlayWidgetController::BroadcastInitValues()
 {
@@ -22,48 +24,38 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 {
 	const UEveAttributeSet* EveAttributes = CastChecked<UEveAttributeSet>(AttributeSet);
 
+	// health
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EveAttributes->GetHealthAttribute()).AddUObject(this, &UOverlayWidgetController::HealthChanged);
+		EveAttributes->GetHealthAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnHealthChanged.Broadcast(Data.NewValue);}
+	);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EveAttributes->GetMaxHealthAttribute()).AddUObject(this, &UOverlayWidgetController::MaxHealthChanged);
+		EveAttributes->GetMaxHealthAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnMaxHealthChanged.Broadcast(Data.NewValue);}
+	);
 
+	// body temperature
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EveAttributes->GetBodyTemperatureAttribute()).AddUObject(this, &UOverlayWidgetController::BodyTemperatureChanged);
+		EveAttributes->GetBodyTemperatureAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnBodyTemperatureChanged.Broadcast(Data.NewValue);}
+	);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EveAttributes->GetMaxBodyTemperatureAttribute()).AddUObject(this, &UOverlayWidgetController::MaxBodyTemperatureChanged);
+		EveAttributes->GetMaxBodyTemperatureAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnMaxBodyTemperatureChanged.Broadcast(Data.NewValue);}
+	);
 
+	// hunger
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EveAttributes->GetHungerAttribute()).AddUObject(this, &UOverlayWidgetController::HungerChanged);
+		EveAttributes->GetHungerAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnHungerChanged.Broadcast(Data.NewValue);}
+	);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EveAttributes->GetMaxHungerAttribute()).AddUObject(this, &UOverlayWidgetController::MaxHungerChanged);
-}
+		EveAttributes->GetMaxHungerAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnMaxHungerChanged.Broadcast(Data.NewValue);}
+	);
 
-void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Data) const
-{
-	OnHealthChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& Data)	const
-{
-	OnMaxHealthChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayWidgetController::BodyTemperatureChanged(const FOnAttributeChangeData& Data) const
-{
-	OnBodyTemperatureChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayWidgetController::MaxBodyTemperatureChanged(const FOnAttributeChangeData& Data) const
-{
-	OnMaxBodyTemperatureChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayWidgetController::HungerChanged(const FOnAttributeChangeData& Data) const
-{
-	OnHungerChanged.Broadcast(Data.NewValue);
-}
-
-void UOverlayWidgetController::MaxHungerChanged(const FOnAttributeChangeData& Data) const
-{
-	OnMaxHungerChanged.Broadcast(Data.NewValue);
+	Cast<UEveAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		[](const FGameplayTagContainer& AssetTags)
+		{
+			for(const FGameplayTag &Tag : AssetTags)
+			{
+				const FString Msg = FString::Printf(TEXT("GE Tag : %s"), *Tag.ToString());
+				GEngine->AddOnScreenDebugMessage(-1, 5.F, FColor::Blue, Msg);
+			}
+		}
+	);
 }

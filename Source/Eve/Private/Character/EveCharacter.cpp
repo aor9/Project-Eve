@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "AbilitySystem/EveAbilitySystemComponent.h"
 #include "AbilitySystem/EveAttributeSet.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -94,7 +95,10 @@ void AEveCharacter::InitAbilityActorInfo()
 {
 	AEvePlayerState* EvePlayerState = GetPlayerState<AEvePlayerState>();
 	check(EvePlayerState);
+
 	EvePlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(EvePlayerState, this);
+	Cast<UEveAbilitySystemComponent>(EvePlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
+	
 	AbilitySystemComponent = EvePlayerState->GetAbilitySystemComponent();
 	AttributeSet = EvePlayerState->GetAttributeSet();
 

@@ -20,3 +20,7 @@ void AEveCharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 }
+
+void AEveCharacterBase::InitAbilityActorInfo()
+{
+}

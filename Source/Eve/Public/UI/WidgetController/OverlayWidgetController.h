@@ -6,14 +6,32 @@
 #include "UI/WidgetController/EveWidgetController.h"
 #include "OverlayWidgetController.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedSignature, float, NewHealth);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHealthChangedSignature, float, NewMaxHealth);
+class UEveUserWidget;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBodyTemperatureChangedSignature, float, NewBodyTemperature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxBodyTemperatureChangedSignature, float, NewMaxBodyTemperature);
+// 아이템 획득이나 이벤트 발생시 사용 할 팝업 UI
+// TODO: DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemAcquired, const FGameplayTag&) 델리게이트 만들기
+USTRUCT(BlueprintType)
+struct FItemPopupUI : public FTableRowBase
+{
+	GENERATED_BODY()
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHungerChangedSignature, float, NewHunger);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMaxHungerChangedSignature, float, NewMaxHunger);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayTag MessageTag = FGameplayTag();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText Message = FText();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UEveUserWidget> MessageWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UTexture2D* Image = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UTexture2D* BackgroundImage = nullptr;
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChangeSignature, float, NewValue);
 
 /**
  * 
@@ -28,30 +46,21 @@ public:
 	virtual void BindCallbacksToDependencies() override;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
-	FOnHealthChangedSignature OnHealthChanged;
+	FOnAttributeChangeSignature OnHealthChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
-	FOnMaxHealthChangedSignature OnMaxHealthChanged;
+	FOnAttributeChangeSignature OnMaxHealthChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
-	FOnBodyTemperatureChangedSignature OnBodyTemperatureChanged;
+	FOnAttributeChangeSignature OnBodyTemperatureChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
-	FOnMaxBodyTemperatureChangedSignature OnMaxBodyTemperatureChanged;
+	FOnAttributeChangeSignature OnMaxBodyTemperatureChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
-	FOnHungerChangedSignature OnHungerChanged;
+	FOnAttributeChangeSignature OnHungerChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "GAS|Attributes")
-	FOnMaxHungerChangedSignature OnMaxHungerChanged;
-
-protected:
-	void HealthChanged(const FOnAttributeChangeData& Data) const;
-	void MaxHealthChanged(const FOnAttributeChangeData& Data) const;
-
-	void BodyTemperatureChanged(const FOnAttributeChangeData& Data) const;
-	void MaxBodyTemperatureChanged(const FOnAttributeChangeData& Data) const;
+	FOnAttributeChangeSignature OnMaxHungerChanged;
 	
-	void HungerChanged(const FOnAttributeChangeData& Data) const;
-	void MaxHungerChanged(const FOnAttributeChangeData& Data) const;
 };
