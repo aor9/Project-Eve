@@ -53,8 +53,8 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		{
 			for(const FGameplayTag &Tag : AssetTags)
 			{
-				const FString Msg = FString::Printf(TEXT("GE Tag : %s"), *Tag.ToString());
-				GEngine->AddOnScreenDebugMessage(-1, 5.F, FColor::Blue, Msg);
+				//const FString Msg = FString::Printf(TEXT("GE Tag : %s"), *Tag.ToString());
+				//GEngine->AddOnScreenDebugMessage(-1, 5.F, FColor::Blue, Msg);
 			}
 		}
 	);

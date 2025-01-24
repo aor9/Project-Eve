@@ -109,5 +109,6 @@ void AEveCharacter::InitAbilityActorInfo()
 			EveHUD->InitOverlay(EvePlayerController, EvePlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
-	
+
+	InitDefaultAttributes();
 }

@@ -12,25 +12,21 @@
 
 UEveAttributeSet::UEveAttributeSet()
 {
-	InitHealth(50.f);
-	InitMaxHealth(100.f);
-	InitBodyTemperature(0.5f);
-	InitMaxBodyTemperature(1.f);
-	InitHunger(0.5f);
-	InitMaxHunger(1.f);
 	
-	InitStamina(1.f);
-	InitMaxStamina(1.f);
 }
 
 void UEveAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, Health, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, Strength, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, Endurance, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, Willpower, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, Health, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, BodyTemperature, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, MaxBodyTemperature, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UEveAttributeSet, Hunger, COND_None, REPNOTIFY_Always);
@@ -52,10 +48,6 @@ void UEveAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 	if(Attribute == GetBodyTemperatureAttribute())
 	{
 		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxBodyTemperature());
-	}
-	if(Attribute == GetStaminaAttribute())
-	{
-		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxStamina());
 	}
 }
 
@@ -98,6 +90,36 @@ void UEveAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData&
 	}
 }
 
+void UEveAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, Strength, OldStrength);
+}
+
+void UEveAttributeSet::OnRep_Dexterity(const FGameplayAttributeData& OldDexterity) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, Dexterity, OldDexterity);
+}
+
+void UEveAttributeSet::OnRep_Endurance(const FGameplayAttributeData& OldEndurance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, Endurance, OldEndurance);
+}
+
+void UEveAttributeSet::OnRep_Willpower(const FGameplayAttributeData& OldWillpower) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, Willpower, OldWillpower);
+}
+
+void UEveAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldStamina) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, Stamina, OldStamina);
+}
+
+void UEveAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, MaxStamina, OldMaxStamina);
+}
+
 void UEveAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, Health, OldHealth);
@@ -126,14 +148,4 @@ void UEveAttributeSet::OnRep_Hunger(const FGameplayAttributeData& OldHunger) con
 void UEveAttributeSet::OnRep_MaxHunger(const FGameplayAttributeData& OldMaxHunger) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, MaxHunger, OldMaxHunger);
-}
-
-void UEveAttributeSet::OnRep_Stamina(const FGameplayAttributeData& OldStamina) const
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, Stamina, OldStamina);
-}
-
-void UEveAttributeSet::OnRep_MaxStamina(const FGameplayAttributeData& OldMaxStamina) const
-{
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UEveAttributeSet, MaxStamina, OldMaxStamina);
 }
