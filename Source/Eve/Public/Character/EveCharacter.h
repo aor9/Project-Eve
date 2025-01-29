@@ -6,10 +6,13 @@
 #include "Character/EveCharacterBase.h"
 #include "EveCharacter.generated.h"
 
+class UDataAsset_InputConfig;
 class UNiagaraComponent;
 class UNiagaraSystem;
 class USpringArmComponent;
 class UCameraComponent;
+class UInputComponent;
+class AController;
 /**
  * 
  */
@@ -20,7 +23,6 @@ class EVE_API AEveCharacter : public AEveCharacterBase
 public:
 	AEveCharacter();
 	
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
 	
@@ -35,13 +37,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<USpringArmComponent> SpringArm;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UCameraComponent> Camera;
 
 private:
 	virtual void InitAbilityActorInfo() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess= "true"))
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess= "true"))
+	UCameraComponent* Camera;
 };

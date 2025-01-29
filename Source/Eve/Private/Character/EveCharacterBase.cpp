@@ -3,12 +3,16 @@
 
 #include "Character/EveCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "EveDebugHelper.h"
+#include "AbilitySystem/EveAbilitySystemComponent.h"
 
 
 AEveCharacterBase::AEveCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bStartWithTickEnabled = false;
 
+	GetMesh()->bReceivesDecals = false;
 }
 
 UAbilitySystemComponent* AEveCharacterBase::GetAbilitySystemComponent() const
@@ -40,4 +44,13 @@ void AEveCharacterBase::InitDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+}
+
+void AEveCharacterBase::AddCharacterAbilities()
+{
+	if(!HasAuthority())	return;
+
+	UEveAbilitySystemComponent* EveASC = CastChecked<UEveAbilitySystemComponent>(AbilitySystemComponent);
+	EveASC->AddCharacterAbilities(StartupAbilities);
+	Debug::Print("Character Abilities Granted");
 }

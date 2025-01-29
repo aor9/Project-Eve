@@ -15,6 +15,8 @@
 #include "Player/EvePlayerState.h"
 #include "UI/HUD/EveHUD.h"
 
+#include "EveDebugHelper.h"
+
 
 AEveCharacter::AEveCharacter()
 {
@@ -32,6 +34,8 @@ AEveCharacter::AEveCharacter()
 void AEveCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Debug::Print(TEXT("Working"));
 	
 	NiagaraSnowComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
 		SnowingEffect,
@@ -62,10 +66,6 @@ void AEveCharacter::Tick(float DeltaSeconds)
 	}
 }
 
-void AEveCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
 
 void AEveCharacter::PossessedBy(AController* NewController)
 {
@@ -73,6 +73,7 @@ void AEveCharacter::PossessedBy(AController* NewController)
 
 	// init ability info for the server
 	InitAbilityActorInfo();
+	AddCharacterAbilities();
 }
 
 void AEveCharacter::OnRep_PlayerState()
