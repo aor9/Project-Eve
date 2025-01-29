@@ -14,8 +14,7 @@ USTRUCT()
 struct FEveInputAction
 {
 	GENERATED_BODY()
-
-public:
+	
 	UPROPERTY(EditDefaultsOnly)
 	FGameplayTag InputTag = FGameplayTag::EmptyTag;
 

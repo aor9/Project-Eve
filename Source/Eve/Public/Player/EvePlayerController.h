@@ -6,7 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "EvePlayerController.generated.h"
 
-class UEveAnimInstance;
+class AEveCharacter;
+class UEveBaseAnimInstance;
 struct FInputActionValue;
 
 /**
@@ -33,7 +34,13 @@ private:
 private:
 	UPROPERTY()
 	APawn* ControlledPawn;
-	UEveAnimInstance* EveAnimInstance;
+
+	UPROPERTY()
+	UEveBaseAnimInstance* EveAnimInstance;
+
+	UPROPERTY()
+	AEveCharacter* EveCharacter;
+	
 	
 	int32 ViewportSizeX;
 	int32 ViewportSizeY;

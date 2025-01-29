@@ -9,6 +9,6 @@
  */
 namespace EveGameplayTags
 {
-	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_Move);
-	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_Roll);
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_Move);
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_Roll);
 };

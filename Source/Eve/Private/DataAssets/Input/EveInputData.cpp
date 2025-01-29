@@ -1,7 +1,7 @@
 // Copyright aor9
 
 
-#include "Data/EveInputData.h"
+#include "DataAssets/Input/EveInputData.h"
 
 
 const UInputAction* UEveInputData::FindInputActionByTag(const FGameplayTag& InputTag) const

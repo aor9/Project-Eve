@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Data/EveAssetData.h"
+#include "DataAssets/EveAssetData.h"
 #include "Engine/AssetManager.h"
 #include "EveAssetManager.generated.h"
 
