@@ -17,6 +17,12 @@ AEvePlayerController::AEvePlayerController(const FObjectInitializer& ObjectIniti
 	: Super(ObjectInitializer)
 {
 	bReplicates = true;
+
+	bShowMouseCursor = true;
+	FInputModeGameAndUI InputMode;
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	InputMode.SetHideCursorDuringCapture(false);
+	APlayerController::SetInputMode(InputMode);
 }
 
 void AEvePlayerController::BeginPlay()
@@ -111,15 +117,14 @@ void AEvePlayerController::Input_Roll(const FInputActionValue& InputValue)
 
 void AEvePlayerController::GetMouseNormal()
 {
-	if (!EveAnimInstance)	return;
+	//if (!EveAnimInstance)	return;
 	
 	// if (EveAnimInstance->bIsRolling)	return;
 	
 	FVector2D MousePosition;
-
 	if (GetMousePosition(MousePosition.X, MousePosition.Y))
 	{
-		FVector2D ScreenCenter = FVector2D(ViewportSizeX * 0.5f, ViewportSizeY * 0.5f);
+		FVector2D ScreenCenter = FVector2D(ViewportSizeX* 0.5f, ViewportSizeY * 0.5f);
 		FVector2D MouseDelta = MousePosition - ScreenCenter;
 		FVector2D MouseNormalFromCenter = MouseDelta.GetSafeNormal();
 

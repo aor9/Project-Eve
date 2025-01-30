@@ -34,8 +34,6 @@ AEveCharacter::AEveCharacter()
 void AEveCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Debug::Print(TEXT("Working"));
 	
 	NiagaraSnowComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
 		SnowingEffect,

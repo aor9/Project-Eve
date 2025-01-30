@@ -9,7 +9,7 @@
 
 AEveCharacterBase::AEveCharacterBase()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
 	GetMesh()->bReceivesDecals = false;
@@ -46,7 +46,7 @@ void AEveCharacterBase::InitDefaultAttributes() const
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
 }
 
-void AEveCharacterBase::AddCharacterAbilities()
+void AEveCharacterBase::AddCharacterAbilities() const
 {
 	if(!HasAuthority())	return;
 
