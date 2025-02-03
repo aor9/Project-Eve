@@ -3,13 +3,14 @@
 
 #include "Player/EvePlayerController.h"
 
-#include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "EveDebugHelper.h"
 #include "System/EveAssetManager.h"
 #include "EveGameplayTags.h"
 #include "Animation/EveBaseAnimInstance.h"
 #include "Character/EveCharacter.h"
 #include "DataAssets/Input/EveInputData.h"
+#include "Input/EveInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -17,12 +18,6 @@ AEvePlayerController::AEvePlayerController(const FObjectInitializer& ObjectIniti
 	: Super(ObjectInitializer)
 {
 	bReplicates = true;
-
-	bShowMouseCursor = true;
-	FInputModeGameAndUI InputMode;
-	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	InputMode.SetHideCursorDuringCapture(false);
-	APlayerController::SetInputMode(InputMode);
 }
 
 void AEvePlayerController::BeginPlay()
@@ -37,7 +32,8 @@ void AEvePlayerController::BeginPlay()
 		EveAnimInstance = Cast<UEveBaseAnimInstance>(EveCharacter->GetMesh()->GetAnimInstance());
 	}
 
-	if (const UEveInputData* InputData = UEveAssetManager::GetAssetByName<UEveInputData>("InputData"))
+	InputData = UEveAssetManager::GetAssetByName<UEveInputData>("InputData");
+	if (InputData)
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 		{
@@ -47,11 +43,6 @@ void AEvePlayerController::BeginPlay()
 
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
-
-	FInputModeGameAndUI InputModeData;
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	InputModeData.SetHideCursorDuringCapture(false);
-	SetInputMode(InputModeData);
 }
 
 void AEvePlayerController::Tick(float DeltaTime)
@@ -76,15 +67,18 @@ void AEvePlayerController::Tick(float DeltaTime)
 void AEvePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	
-	if (const UEveInputData* InputData = UEveAssetManager::GetAssetByName<UEveInputData>("InputData"))
+
+	InputData = UEveAssetManager::GetAssetByName<UEveInputData>("InputData");
+	if(InputData)
 	{
-		UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+		UEveInputComponent* EveInputComponent = CastChecked<UEveInputComponent>(InputComponent);
 
 		auto MoveAction = InputData->FindInputActionByTag(EveGameplayTags::Input_Action_Move);
 		auto RollAction = InputData->FindInputActionByTag(EveGameplayTags::Input_Action_Roll);
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
-		EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Roll);
+		EveInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
+		EveInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Roll);
+
+		EveInputComponent->BindAbilityActions(InputData, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 	}
 }
 
@@ -133,4 +127,19 @@ void AEvePlayerController::GetMouseNormal()
 			ControlledCharacter->RotateToMouseDirection(MouseNormalFromCenter);
 		}
 	}
+}
+
+void AEvePlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	Debug::Print(*InputTag.ToString());
+}
+
+void AEvePlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	Debug::Print(*InputTag.ToString());
+}
+
+void AEvePlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	Debug::Print(*InputTag.ToString());
 }

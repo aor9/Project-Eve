@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/PlayerController.h"
 #include "EvePlayerController.generated.h"
 
+class UEveInputData;
 class AEveCharacter;
 class UEveBaseAnimInstance;
 struct FInputActionValue;
@@ -41,8 +43,14 @@ private:
 	UPROPERTY()
 	AEveCharacter* EveCharacter;
 	
-	
 	int32 ViewportSizeX;
 	int32 ViewportSizeY;
 	FVector LastMoveDirection;
+
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UEveInputData> InputData;
 };

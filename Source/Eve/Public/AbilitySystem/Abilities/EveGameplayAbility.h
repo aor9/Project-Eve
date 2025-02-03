@@ -13,6 +13,14 @@ UCLASS()
 class EVE_API UEveGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
-	
-	
+
+public:
+	UPROPERTY(EditAnywhere, Category="Input")
+	FGameplayTag StartInputTag;
+
+	virtual FString GetDescription(int32 Level);
+
+protected:
+	float GetCooldown(float InLevel = 1.f) const;
+	float GetStaminaCost(float InLevel = 1.f) const;
 };
