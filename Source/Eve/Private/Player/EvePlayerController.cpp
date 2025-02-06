@@ -3,10 +3,12 @@
 
 #include "Player/EvePlayerController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
 #include "EveDebugHelper.h"
 #include "System/EveAssetManager.h"
 #include "EveGameplayTags.h"
+#include "AbilitySystem/EveAbilitySystemComponent.h"
 #include "Animation/EveBaseAnimInstance.h"
 #include "Character/EveCharacter.h"
 #include "DataAssets/Input/EveInputData.h"
@@ -131,15 +133,27 @@ void AEvePlayerController::GetMouseNormal()
 
 void AEvePlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	Debug::Print(*InputTag.ToString());
+	// Debug::Print(*InputTag.ToString());
 }
 
 void AEvePlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	Debug::Print(*InputTag.ToString());
+	if(InitASC() == nullptr)	return;
+	InitASC()->AbilityInputTagReleased(InputTag);
 }
 
 void AEvePlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	Debug::Print(*InputTag.ToString());
+	if(InitASC() == nullptr)	return;
+	InitASC()->AbilityInputTagHeld(InputTag);
+}
+
+UEveAbilitySystemComponent* AEvePlayerController::InitASC()
+{
+	if(EveAbilitySystemComponent == nullptr)
+	{
+		EveAbilitySystemComponent = Cast<UEveAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+
+	return EveAbilitySystemComponent;
 }

@@ -14,6 +14,7 @@
 #include "Player/EvePlayerController.h"
 #include "Player/EvePlayerState.h"
 #include "UI/HUD/EveHUD.h"
+#include "Components/PlayerCombatComponent.h"
 
 #include "EveDebugHelper.h"
 
@@ -29,6 +30,8 @@ AEveCharacter::AEveCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
+
+	PlayerCombatComponent = CreateDefaultSubobject<UPlayerCombatComponent>(TEXT("PlayerCombatComponent"));
 }
 
 void AEveCharacter::BeginPlay()

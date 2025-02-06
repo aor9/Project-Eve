@@ -11,6 +11,7 @@ class UEveInputData;
 class AEveCharacter;
 class UEveBaseAnimInstance;
 struct FInputActionValue;
+class UEveAbilitySystemComponent;
 
 /**
  * 
@@ -53,4 +54,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UEveInputData> InputData;
+
+	UPROPERTY()
+	TObjectPtr<UEveAbilitySystemComponent> EveAbilitySystemComponent;
+
+	UEveAbilitySystemComponent* InitASC();
 };

@@ -13,6 +13,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputComponent;
 class AController;
+class UPlayerCombatComponent;
 /**
  * 
  */
@@ -46,4 +47,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess= "true"))
 	UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess= "true", DisplayPriority = 1))
+	UPlayerCombatComponent* PlayerCombatComponent;
+
+public:
+	FORCEINLINE UPlayerCombatComponent* GetPlayerCombatComponent() const { return PlayerCombatComponent; }
 };

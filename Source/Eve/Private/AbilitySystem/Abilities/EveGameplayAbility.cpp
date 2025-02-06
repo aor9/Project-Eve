@@ -41,3 +41,13 @@ float UEveGameplayAbility::GetStaminaCost(float InLevel) const
 	
 	return StaminaCost;
 }
+
+UPawnCombatComponent* UEveGameplayAbility::GetPawnCombatComponentFromActorInfo() const
+{
+	return GetAvatarActorFromActorInfo()->FindComponentByClass<UPawnCombatComponent>();
+}
+
+UEveAbilitySystemComponent* UEveGameplayAbility::GetASCFromActorInfo() const
+{
+	return Cast<UEveAbilitySystemComponent>(CurrentActorInfo->AbilitySystemComponent);
+}
