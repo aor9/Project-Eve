@@ -44,9 +44,7 @@ private:
 	UPROPERTY()
 	AEveCharacter* EveCharacter;
 	
-	int32 ViewportSizeX;
-	int32 ViewportSizeY;
-	FVector LastMoveDirection;
+	// FVector LastMoveDirection;
 
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);

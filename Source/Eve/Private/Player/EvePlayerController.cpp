@@ -25,8 +25,7 @@ AEvePlayerController::AEvePlayerController(const FObjectInitializer& ObjectIniti
 void AEvePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	
 	ControlledPawn = GetPawn();
 	EveCharacter = Cast<AEveCharacter>(ControlledPawn);
 	if (EveCharacter)
@@ -95,7 +94,7 @@ void AEvePlayerController::Input_Move(const FInputActionValue& InputValue)
 	const FVector ForwardDirection = FVector(1.0f, 0.0f, 0.0f);
 	const FVector RightDirection = FVector(0.0f, -1.0f, 0.0f);
 	const FVector MoveDirection = (ForwardDirection * InputAxisVector.X) + (RightDirection * InputAxisVector.Y);
-	LastMoveDirection = MoveDirection.GetSafeNormal();
+	// LastMoveDirection = MoveDirection.GetSafeNormal();
 	
 	ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.X);
 	ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.Y);
@@ -113,16 +112,19 @@ void AEvePlayerController::Input_Roll(const FInputActionValue& InputValue)
 
 void AEvePlayerController::GetMouseNormal()
 {
-	//if (!EveAnimInstance)	return;
-	
-	// if (EveAnimInstance->bIsRolling)	return;
-	
 	FVector2D MousePosition;
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+
 	if (GetMousePosition(MousePosition.X, MousePosition.Y))
 	{
 		FVector2D ScreenCenter = FVector2D(ViewportSizeX* 0.5f, ViewportSizeY * 0.5f);
 		FVector2D MouseDelta = MousePosition - ScreenCenter;
 		FVector2D MouseNormalFromCenter = MouseDelta.GetSafeNormal();
+		
+		UE_LOG(LogTemp, Warning, TEXT("Mouse Delta: X=%f, Y=%f"), MouseDelta.X, MouseDelta.Y);
+		UE_LOG(LogTemp, Warning, TEXT("Mouse Normal: X=%f, Y=%f"), MouseNormalFromCenter.X, MouseNormalFromCenter.Y);
+
 
 		if (AEveCharacter* ControlledCharacter = Cast<AEveCharacter>(GetPawn()))
 		{
