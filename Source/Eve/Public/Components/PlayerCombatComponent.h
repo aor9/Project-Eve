@@ -6,6 +6,7 @@
 #include "Components/PawnCombatComponent.h"
 #include "PlayerCombatComponent.generated.h"
 
+class AEvePlayerWeapon;
 /**
  * 
  */
@@ -14,7 +15,9 @@ class EVE_API UPlayerCombatComponent : public UPawnCombatComponent
 {
 	GENERATED_BODY()
 	
-	
+public:
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	AEvePlayerWeapon* GetPlayerCarriedWeaponByTag(FGameplayTag WeaponTag) const;
 	
 	
 };
