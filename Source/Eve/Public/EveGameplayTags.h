@@ -17,7 +17,16 @@ namespace EveGameplayTags
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Q);
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_E);
 
-	// ** Player Weapons
+	// ** Player
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_Attack_Light_Sword);
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Ability_Attack_Heavy_Sword);
+
+	// ** Player State
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_State_NoMove);
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_State_Stunned);
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_State_Bleeding);
+
+	// ** Player Weapon
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Weapon_Sword);
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Weapon_Shield);
 };

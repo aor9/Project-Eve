@@ -49,20 +49,8 @@ void AEvePlayerController::BeginPlay()
 void AEvePlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	GetMouseNormal();
-
-	// if(!EveAnimInstance || !EveAnimInstance->bIsRolling)
-	// {
-	// 	GetMouseNormal();
-	// }
 	
-	// if(ControlledPawn && EveAnimInstance->bIsRolling)
-	// {
-	// 	LastMoveDirection = LastMoveDirection.GetSafeNormal();
-	// 	ControlledPawn->AddMovementInput(LastMoveDirection, 500.f * DeltaTime);
-	// 	ControlledPawn->SetActorRotation(LastMoveDirection.Rotation());
-	// }
+	GetMouseNormal();
 }
 
 void AEvePlayerController::SetupInputComponent()
@@ -85,16 +73,17 @@ void AEvePlayerController::SetupInputComponent()
 
 void AEvePlayerController::Input_Move(const FInputActionValue& InputValue)
 {
+	if (InitASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.NoMove"))))
+	{
+		return;
+	}
+	
 	const FVector2D InputAxisVector = InputValue.Get<FVector2D>();
 	
 	if (!ControlledPawn || !EveCharacter || !EveAnimInstance) return;
-
-	// if(EveAnimInstance->bIsRolling == true)	return;
 	
 	const FVector ForwardDirection = FVector(1.0f, 0.0f, 0.0f);
 	const FVector RightDirection = FVector(0.0f, -1.0f, 0.0f);
-	const FVector MoveDirection = (ForwardDirection * InputAxisVector.X) + (RightDirection * InputAxisVector.Y);
-	// LastMoveDirection = MoveDirection.GetSafeNormal();
 	
 	ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.X);
 	ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.Y);
@@ -116,26 +105,28 @@ void AEvePlayerController::GetMouseNormal()
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 
-	if (GetMousePosition(MousePosition.X, MousePosition.Y))
+	if (GetMousePosition(MousePosition.X, MousePosition.Y) && !InitASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.NoMove"))))
 	{
 		FVector2D ScreenCenter = FVector2D(ViewportSizeX* 0.5f, ViewportSizeY * 0.5f);
 		FVector2D MouseDelta = MousePosition - ScreenCenter;
-		FVector2D MouseNormalFromCenter = MouseDelta.GetSafeNormal();
-		
-		UE_LOG(LogTemp, Warning, TEXT("Mouse Delta: X=%f, Y=%f"), MouseDelta.X, MouseDelta.Y);
-		UE_LOG(LogTemp, Warning, TEXT("Mouse Normal: X=%f, Y=%f"), MouseNormalFromCenter.X, MouseNormalFromCenter.Y);
-
-
+		CachedMouseNormal = MouseDelta.GetSafeNormal();
 		if (AEveCharacter* ControlledCharacter = Cast<AEveCharacter>(GetPawn()))
 		{
-			ControlledCharacter->RotateToMouseDirection(MouseNormalFromCenter);
+			ControlledCharacter->RotateToMouseDirection(CachedMouseNormal);
+		}
+	}
+	else
+	{
+		if (AEveCharacter* ControlledCharacter = Cast<AEveCharacter>(GetPawn()))
+		{
+			ControlledCharacter->RotateToMouseDirection(CachedMouseNormal);
 		}
 	}
 }
 
 void AEvePlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	// Debug::Print(*InputTag.ToString());
+	
 }
 
 void AEvePlayerController::AbilityInputTagReleased(FGameplayTag InputTag)

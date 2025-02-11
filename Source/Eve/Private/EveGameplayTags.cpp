@@ -14,6 +14,15 @@ namespace EveGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Input_Q, "Input.Q");
 	UE_DEFINE_GAMEPLAY_TAG(Input_E, "Input.E");
 	
+	// ** Player
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack_Light_Sword, "Player.Ability.Attack.Light.Sword");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack_Heavy_Sword, "Player.Ability.Attack.Heavy.Sword");
+
+	// ** Player State
+	UE_DEFINE_GAMEPLAY_TAG(Player_State_NoMove, "Player.State.NoMove");
+	UE_DEFINE_GAMEPLAY_TAG(Player_State_Stunned, "Player.State.Stunned");
+	UE_DEFINE_GAMEPLAY_TAG(Player_State_Bleeding, "Player.State.Bleeding");
+	
 	// ** Player Weapons
 	UE_DEFINE_GAMEPLAY_TAG(Player_Weapon_Sword, "Player.Weapon.Sword");
 	UE_DEFINE_GAMEPLAY_TAG(Player_Weapon_Shield, "Player.Weapon.Shield");

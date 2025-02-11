@@ -18,6 +18,9 @@ void UOverlayWidgetController::BroadcastInitValues()
 	
 	OnHungerChanged.Broadcast(EveAttributes->GetHunger());
 	OnMaxHungerChanged.Broadcast(EveAttributes->GetMaxHunger());
+	
+	OnStaminaChanged.Broadcast(EveAttributes->GetStamina());
+	OnMaxStaminaChanged.Broadcast(EveAttributes->GetMaxStamina());
 }
 
 void UOverlayWidgetController::BindCallbacksToDependencies()
@@ -46,6 +49,14 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 	);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		EveAttributes->GetMaxHungerAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnMaxHungerChanged.Broadcast(Data.NewValue);}
+	);
+
+	// stamina
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		EveAttributes->GetStaminaAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnStaminaChanged.Broadcast(Data.NewValue);}
+	);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		EveAttributes->GetStaminaAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnMaxStaminaChanged.Broadcast(Data.NewValue);}
 	);
 
 	Cast<UEveAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(

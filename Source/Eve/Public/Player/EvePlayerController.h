@@ -57,4 +57,6 @@ private:
 	TObjectPtr<UEveAbilitySystemComponent> EveAbilitySystemComponent;
 
 	UEveAbilitySystemComponent* InitASC();
+
+	FVector2D CachedMouseNormal;
 };
