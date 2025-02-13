@@ -20,6 +20,7 @@ namespace EveGameplayTags
 
 	// ** Player State
 	UE_DEFINE_GAMEPLAY_TAG(Player_State_NoMove, "Player.State.NoMove");
+	UE_DEFINE_GAMEPLAY_TAG(Player_State_Rolling, "Player.State.Rolling");
 	UE_DEFINE_GAMEPLAY_TAG(Player_State_Stunned, "Player.State.Stunned");
 	UE_DEFINE_GAMEPLAY_TAG(Player_State_Bleeding, "Player.State.Bleeding");
 	

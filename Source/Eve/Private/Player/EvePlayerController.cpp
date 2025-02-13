@@ -49,8 +49,16 @@ void AEvePlayerController::BeginPlay()
 void AEvePlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	GetMouseNormal();
+	if (InitASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.Rolling"))) && ControlledPawn)
+	{
+		RollingDirection.Normalize();
+		ControlledPawn->AddMovementInput(RollingDirection, RollingPower * DeltaTime);
+		ControlledPawn->SetActorRotation(RollingDirection.Rotation());
+	}
+	else
+	{
+		GetMouseNormal();
+	}
 }
 
 void AEvePlayerController::SetupInputComponent()
@@ -63,9 +71,7 @@ void AEvePlayerController::SetupInputComponent()
 		UEveInputComponent* EveInputComponent = CastChecked<UEveInputComponent>(InputComponent);
 
 		auto MoveAction = InputData->FindInputActionByTag(EveGameplayTags::Input_Action_Move);
-		auto RollAction = InputData->FindInputActionByTag(EveGameplayTags::Input_Action_Roll);
 		EveInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
-		EveInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Roll);
 
 		EveInputComponent->BindAbilityActions(InputData, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 	}
@@ -73,7 +79,8 @@ void AEvePlayerController::SetupInputComponent()
 
 void AEvePlayerController::Input_Move(const FInputActionValue& InputValue)
 {
-	if (InitASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.NoMove"))))
+	if (InitASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.NoMove")))
+		|| InitASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.Rolling"))))
 	{
 		return;
 	}
@@ -84,20 +91,18 @@ void AEvePlayerController::Input_Move(const FInputActionValue& InputValue)
 	
 	const FVector ForwardDirection = FVector(1.0f, 0.0f, 0.0f);
 	const FVector RightDirection = FVector(0.0f, -1.0f, 0.0f);
+	const FVector MoveDirection = (ForwardDirection * InputAxisVector.X) + (RightDirection * InputAxisVector.Y);
+	LastMoveDirection = MoveDirection.GetSafeNormal();
 	
 	ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.X);
 	ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.Y);
 }
 
-void AEvePlayerController::Input_Roll(const FInputActionValue& InputValue)
+void AEvePlayerController::StartRolling(FVector Direction, float RollPower)
 {
-	if (!ControlledPawn || !EveCharacter || !EveAnimInstance) return;
-	
-	// if(EveAnimInstance->bIsRolling == true)	return;
-	
-	// EveAnimInstance->bIsRolling = true;
+	RollingDirection = Direction;
+	RollingPower = RollPower;
 }
-
 
 void AEvePlayerController::GetMouseNormal()
 {
@@ -126,7 +131,7 @@ void AEvePlayerController::GetMouseNormal()
 
 void AEvePlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	
+	Debug::Print(InputTag.ToString());
 }
 
 void AEvePlayerController::AbilityInputTagReleased(FGameplayTag InputTag)

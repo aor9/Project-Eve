@@ -56,7 +56,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 		EveAttributes->GetStaminaAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnStaminaChanged.Broadcast(Data.NewValue);}
 	);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-		EveAttributes->GetStaminaAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnMaxStaminaChanged.Broadcast(Data.NewValue);}
+		EveAttributes->GetMaxStaminaAttribute()).AddLambda([this](const FOnAttributeChangeData& Data){OnMaxStaminaChanged.Broadcast(Data.NewValue);}
 	);
 
 	Cast<UEveAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(

@@ -51,6 +51,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess= "true", DisplayPriority = 1))
 	UPlayerCombatComponent* PlayerCombatComponent;
 
+	float YawRotation;
+	FRotator NewRotation;
+
 public:
 	FORCEINLINE UPlayerCombatComponent* GetPlayerCombatComponent() const { return PlayerCombatComponent; }
 };

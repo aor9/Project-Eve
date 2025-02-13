@@ -23,17 +23,15 @@ class EVE_API AEvePlayerController : public APlayerController
 	
 public:
 	AEvePlayerController(const FObjectInitializer& ObjectInitializer);
+	void StartRolling(FVector Direction, float RollingPower);
+
+	FVector LastMoveDirection;
 	
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupInputComponent() override;
 
-private:
-	void Input_Move(const FInputActionValue& InputValue);
-	void Input_Roll(const FInputActionValue& InputValue);
-	void GetMouseNormal();
-	
 private:
 	UPROPERTY()
 	APawn* ControlledPawn;
@@ -44,8 +42,15 @@ private:
 	UPROPERTY()
 	AEveCharacter* EveCharacter;
 	
-	// FVector LastMoveDirection;
+	void Input_Move(const FInputActionValue& InputValue);
 
+	FVector2D CachedMouseNormal;
+	void GetMouseNormal();
+
+	// ** Rolling
+	FVector RollingDirection;
+	float RollingPower;
+	
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
 	void AbilityInputTagHeld(FGameplayTag InputTag);
@@ -58,5 +63,6 @@ private:
 
 	UEveAbilitySystemComponent* InitASC();
 
-	FVector2D CachedMouseNormal;
+public:
+	UEveBaseAnimInstance* GetEveBaseAnimInstance() const { return EveAnimInstance; }
 };

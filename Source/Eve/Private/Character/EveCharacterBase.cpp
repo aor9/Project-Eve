@@ -10,7 +10,6 @@
 AEveCharacterBase::AEveCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = false;
 
 	GetMesh()->bReceivesDecals = false;
 }

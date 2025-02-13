@@ -60,11 +60,17 @@ void AEveCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	// ** Snow Effect
 	if (NiagaraSnowComponent && Camera)
 	{
 		FVector CameraLocation = Camera->GetComponentLocation();
 		NiagaraSnowComponent->SetWorldLocation(CameraLocation + FVector(0.f, 0.f, 300.f));
 	}
+
+	// ** Character Rotation
+	FRotator CurrentRotation = GetActorRotation();
+	FRotator SmoothedRotation = FMath::RInterpTo(CurrentRotation, NewRotation, DeltaSeconds, 20.0f);
+	SetActorRotation(SmoothedRotation);
 }
 
 
@@ -87,10 +93,9 @@ void AEveCharacter::OnRep_PlayerState()
 
 void AEveCharacter::RotateToMouseDirection(const FVector2D& MouseNormal)
 {
-	float YawRotation = FMath::Atan2(MouseNormal.Y, MouseNormal.X) * (180.0f / PI);
-	FRotator NewRotation = FRotator(0.0f, YawRotation, 0.0f);
+	YawRotation = FMath::Atan2(MouseNormal.Y, MouseNormal.X) * (180.0f / PI);
+	NewRotation = FRotator(0.0f, YawRotation, 0.0f);
 	
-	SetActorRotation(NewRotation);
 }
 
 void AEveCharacter::InitAbilityActorInfo()
