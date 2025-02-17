@@ -30,4 +30,7 @@ namespace EveGameplayTags
 	// ** Player Weapon
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Weapon_Sword);
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Weapon_Shield);
+
+	// ** Enemy
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
 };
