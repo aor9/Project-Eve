@@ -79,20 +79,19 @@ void AEvePlayerController::SetupInputComponent()
 
 void AEvePlayerController::Input_Move(const FInputActionValue& InputValue)
 {
+	const FVector2D InputAxisVector = InputValue.Get<FVector2D>();
+	const FVector ForwardDirection = FVector(1.0f, 0.0f, 0.0f);
+	const FVector RightDirection = FVector(0.0f, -1.0f, 0.0f);
+	const FVector MoveDirection = (ForwardDirection * InputAxisVector.X) + (RightDirection * InputAxisVector.Y);
+	LastMoveDirection = MoveDirection.GetSafeNormal();
+	
 	if (InitASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.NoMove")))
 		|| InitASC()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.Rolling"))))
 	{
 		return;
 	}
 	
-	const FVector2D InputAxisVector = InputValue.Get<FVector2D>();
-	
 	if (!ControlledPawn || !EveCharacter || !EveAnimInstance) return;
-	
-	const FVector ForwardDirection = FVector(1.0f, 0.0f, 0.0f);
-	const FVector RightDirection = FVector(0.0f, -1.0f, 0.0f);
-	const FVector MoveDirection = (ForwardDirection * InputAxisVector.X) + (RightDirection * InputAxisVector.Y);
-	LastMoveDirection = MoveDirection.GetSafeNormal();
 	
 	ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.X);
 	ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.Y);
