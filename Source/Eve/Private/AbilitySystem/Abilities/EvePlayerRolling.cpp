@@ -23,6 +23,23 @@ void UEvePlayerRolling::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	UAnimInstance* AnimInstance = EveCharacter->GetMesh()->GetAnimInstance();
 	if (AnimInstance)
 	{
+		// ** Stamina 감소
+		UAbilitySystemComponent* ASC = EveCharacter->GetAbilitySystemComponent();
+		const UEveAttributeSet* EveAS = Cast<UEveAttributeSet>(EveCharacter->GetAttributeSet());
+		if (!EveAS) return;
+
+		float CurrentStamina = EveAS->GetStamina();
+		const float StaminaCost = 0.2f;              
+		
+		if (CurrentStamina < StaminaCost)
+		{
+			EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+			return;
+		}
+
+		ASC->ApplyModToAttribute(UEveAttributeSet::GetStaminaAttribute(), EGameplayModOp::Additive, -StaminaCost);
+
+		// ** Rolling 실행
 		EveCharacter->GetAbilitySystemComponent()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.Rolling")));
 		
 		AnimInstance->Montage_Play(RollMontage);

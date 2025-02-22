@@ -1,0 +1,42 @@
+[
+  {
+    "Name": "Attributes.Primary.Strength",
+    "1": 15,
+    "5": 20,
+    "10": 25,
+    "15": 30,
+    "20": 35
+  },
+  {
+    "Name": "Attributes.Primary.Dexterity",
+    "1": 5,
+    "5": 7,
+    "10": 10,
+    "15": 12,
+    "20": 15
+  },
+  {
+    "Name": "Attributes.Primary.Endurance",
+    "1": 0,
+    "5": 0,
+    "10": 0,
+    "15": 0,
+    "20": 0
+  },
+  {
+    "Name": "Attributes.Primary.Luck",
+    "1": 0,
+    "5": 0,
+    "10": 0,
+    "15": 0,
+    "20": 0
+  },
+  {
+    "Name": "Attributes.Primary.Willpower",
+    "1": 0,
+    "5": 0,
+    "10": 0,
+    "15": 0,
+    "20": 0
+  }
+]

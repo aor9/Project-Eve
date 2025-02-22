@@ -18,9 +18,6 @@ void UOverlayWidgetController::BroadcastInitValues()
 	
 	OnHungerChanged.Broadcast(EveAttributes->GetHunger());
 	OnMaxHungerChanged.Broadcast(EveAttributes->GetMaxHunger());
-	
-	OnStaminaChanged.Broadcast(EveAttributes->GetStamina());
-	OnMaxStaminaChanged.Broadcast(EveAttributes->GetMaxStamina());
 }
 
 void UOverlayWidgetController::BindCallbacksToDependencies()

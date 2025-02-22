@@ -17,6 +17,8 @@
 #include "Components/PlayerCombatComponent.h"
 
 #include "EveDebugHelper.h"
+#include "Components/WidgetComponent.h"
+#include "UI/Widgets/EveUserWidget.h"
 
 
 AEveCharacter::AEveCharacter()
@@ -32,6 +34,9 @@ AEveCharacter::AEveCharacter()
 	Camera->bUsePawnControlRotation = false;
 
 	PlayerCombatComponent = CreateDefaultSubobject<UPlayerCombatComponent>(TEXT("PlayerCombatComponent"));
+
+	StaminaBar = CreateDefaultSubobject<UWidgetComponent>("StaminaBar");
+	StaminaBar->SetupAttachment(Camera);
 }
 
 void AEveCharacter::BeginPlay()
@@ -118,4 +123,33 @@ void AEveCharacter::InitAbilityActorInfo()
 	}
 
 	InitDefaultAttributes();
+
+	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &AEveCharacter::InitStaminaWidget);
+}
+
+void AEveCharacter::InitStaminaWidget()
+{
+	if(UEveUserWidget* EveUserWidget = Cast<UEveUserWidget>(StaminaBar->GetUserWidgetObject()))
+	{
+		EveUserWidget->InitWidgetController(this);
+	}
+
+	if(const UEveAttributeSet* EveAS = Cast<UEveAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			EveAS->GetStaminaAttribute()).AddLambda([this](const FOnAttributeChangeData& Data)
+			{
+				OnStaminaChanged.Broadcast(Data.NewValue);
+			}
+		);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+			EveAS->GetMaxStaminaAttribute()).AddLambda([this](const FOnAttributeChangeData& Data)
+			{
+				OnMaxStaminaChanged.Broadcast(Data.NewValue);
+			}
+		);
+
+		OnStaminaChanged.Broadcast(EveAS->GetStamina());
+		OnMaxStaminaChanged.Broadcast(EveAS->GetMaxStamina());
+	}
 }

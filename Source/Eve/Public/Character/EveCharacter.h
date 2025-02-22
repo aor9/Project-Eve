@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/EveCharacterBase.h"
+#include "UI/WidgetController/OverlayWidgetController.h"
 #include "EveCharacter.generated.h"
 
 class UDataAsset_InputConfig;
@@ -14,6 +15,7 @@ class UCameraComponent;
 class UInputComponent;
 class AController;
 class UPlayerCombatComponent;
+class UWidgetComponent;
 /**
  * 
  */
@@ -34,10 +36,19 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Snowing")
 	UNiagaraComponent* NiagaraSnowComponent = nullptr;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangeSignature OnStaminaChanged;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangeSignature OnMaxStaminaChanged;
 	
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> StaminaBar;
 
 private:
 	virtual void InitAbilityActorInfo() override;
@@ -53,6 +64,8 @@ private:
 
 	float YawRotation;
 	FRotator NewRotation;
+
+	void InitStaminaWidget();
 
 public:
 	FORCEINLINE UPlayerCombatComponent* GetPlayerCombatComponent() const { return PlayerCombatComponent; }
