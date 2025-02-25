@@ -29,7 +29,7 @@ void UEvePlayerRolling::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		if (!EveAS) return;
 
 		float CurrentStamina = EveAS->GetStamina();
-		const float StaminaCost = 0.2f;              
+		const float StaminaCost = 0.2f;
 		
 		if (CurrentStamina < StaminaCost)
 		{

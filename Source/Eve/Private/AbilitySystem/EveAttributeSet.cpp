@@ -57,6 +57,19 @@ void UEveAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 
 	FEffectProperties Props;
 	SetEffectProperties(Data, Props);
+
+	if (Data.EvaluatedData.Attribute == GetStaminaAttribute())
+	{
+		float CurrentStamina = GetStamina();
+		float CurMaxStamina = GetMaxStamina();
+		UE_LOG(LogTemp, Warning, TEXT("PostGameplayEffectExecute Stamina: %f (Max: %f)"), CurrentStamina, CurMaxStamina);
+
+		// Stamina 값이 MaxStamina를 초과하면 다시 제한
+		if (CurrentStamina > CurMaxStamina)
+		{
+			SetStamina(FMath::Clamp(CurrentStamina, 0.f, CurMaxStamina));
+		}
+	}
 }
 
 void UEveAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const
