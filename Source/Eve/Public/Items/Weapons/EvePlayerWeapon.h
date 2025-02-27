@@ -7,6 +7,7 @@
 #include "Items/Weapons/EveWeaponBase.h"
 #include "EvePlayerWeapon.generated.h"
 
+class USphereComponent;
 /**
  * 
  */
@@ -18,6 +19,8 @@ class EVE_API AEvePlayerWeapon : public AEveWeaponBase
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WeaponData")
 	FEvePlayerWeaponData PlayerWeaponData;
-	
-	
+
+protected:
+
+private:
 };

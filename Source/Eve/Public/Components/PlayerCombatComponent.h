@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "Components/PawnCombatComponent.h"
 #include "PlayerCombatComponent.generated.h"
 
+class UGameplayEffect;
 class AEvePlayerWeapon;
 /**
  * 
@@ -19,5 +21,5 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	AEvePlayerWeapon* GetPlayerCarriedWeaponByTag(FGameplayTag WeaponTag) const;
 	
-	
+	void MeleeAttackTrace(FGameplayEffectSpecHandle DamageSpecHandle);
 };
