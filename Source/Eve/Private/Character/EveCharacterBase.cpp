@@ -19,6 +19,11 @@ UAbilitySystemComponent* AEveCharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UAnimMontage* AEveCharacterBase::GetHitReactMontage()
+{
+	return HitReactMontage;
+}
+
 void AEveCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

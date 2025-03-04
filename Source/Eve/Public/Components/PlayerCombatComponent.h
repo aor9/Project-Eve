@@ -20,6 +20,12 @@ class EVE_API UPlayerCombatComponent : public UPawnCombatComponent
 public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	AEvePlayerWeapon* GetPlayerCarriedWeaponByTag(FGameplayTag WeaponTag) const;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<UCameraShakeBase> CombatCameraShake;
 	
 	void MeleeAttackTrace(FGameplayEffectSpecHandle DamageSpecHandle);
+	
+	void PlayCombatCameraShake() const;
+	void PlayHitReact(ACharacter* TargetCharacter);
 };

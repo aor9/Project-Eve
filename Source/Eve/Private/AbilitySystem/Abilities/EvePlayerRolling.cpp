@@ -6,6 +6,7 @@
 #include "EveDebugHelper.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Character/EveCharacter.h"
+#include "Components/CapsuleComponent.h"
 #include "Player/EvePlayerController.h"
 
 
@@ -23,6 +24,9 @@ void UEvePlayerRolling::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	UAnimInstance* AnimInstance = EveCharacter->GetMesh()->GetAnimInstance();
 	if (AnimInstance)
 	{
+		// **Collision
+		EveCharacter->GetCapsuleComponent()->SetCollisionProfileName(FName("Rolling"));
+		
 		// ** Stamina 감소
 		UAbilitySystemComponent* ASC = EveCharacter->GetAbilitySystemComponent();
 		const UEveAttributeSet* EveAS = Cast<UEveAttributeSet>(EveCharacter->GetAttributeSet());
@@ -58,6 +62,7 @@ void UEvePlayerRolling::OnRollingComplete()
 	
 	if(!EveCharacter || !ASC)	return;
 	
+	EveCharacter->GetCapsuleComponent()->SetCollisionProfileName(FName("Pawn"));
 	EveCharacter->GetAbilitySystemComponent()->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.Rolling")));
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 }
