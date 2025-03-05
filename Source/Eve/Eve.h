@@ -3,4 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#define ACTOR_TAG_PLAYER "Player"
+#define ACTOR_TAG_ENEMY "Enemy"
 

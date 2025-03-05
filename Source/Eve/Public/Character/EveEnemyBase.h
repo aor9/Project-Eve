@@ -10,6 +10,8 @@
 
 class UWidgetComponent;
 class UEnemyCombatComponent;
+class UBehaviorTree;
+class AEveAIController;
 /**
  * 
  */
@@ -21,6 +23,10 @@ class EVE_API AEveEnemyBase : public AEveCharacterBase
 	
 public:
 	AEveEnemyBase();
+	
+	virtual void PossessedBy(AController* NewController) override;
+
+	void SetHitReacting(bool bReacting);
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangeSignature OnHealthChanged;
@@ -43,6 +49,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+
+	UPROPERTY()
+	TObjectPtr<AEveAIController> EveAIController;
+
+private:
+	float MaxWalkSpeed = 150.f;
 
 public:
 	FORCEINLINE UEnemyCombatComponent* GetEnemyCombatComponent() const {return EnemyCombatComponent;}

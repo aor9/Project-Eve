@@ -4,6 +4,7 @@
 #include "Character/EveCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "Eve.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "AbilitySystem/EveAbilitySystemComponent.h"
@@ -59,6 +60,8 @@ void AEveCharacter::BeginPlay()
 		NiagaraSnowComponent->SetFloatParameter(FName("WindPower"), -100.f);
 		NiagaraSnowComponent->SetFloatParameter(FName("SnowRate"), 300.f);	
 	}
+
+	Tags.Emplace(ACTOR_TAG_PLAYER);
 }
 
 void AEveCharacter::Tick(float DeltaSeconds)

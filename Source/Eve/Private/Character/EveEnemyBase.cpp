@@ -4,7 +4,11 @@
 #include "Character/EveEnemyBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "Eve.h"
 #include "AbilitySystem/EveAbilitySystemComponent.h"
+#include "AI/EveAIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/EnemyCombatComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -13,25 +17,35 @@
 
 AEveEnemyBase::AEveEnemyBase()
 {
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
 	bUseControllerRotationYaw = false;
-	
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+
 	AbilitySystemComponent = CreateDefaultSubobject<UEveAbilitySystemComponent>("AbilitySystemComponent");
 	AttributeSet = CreateDefaultSubobject<UEveAttributeSet>("AttributeSet");
-
-	GetCharacterMovement()->bUseControllerDesiredRotation = false;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.F, 180.f, 0.f);
-	GetCharacterMovement()->MaxWalkSpeed = 300.f;
-	GetCharacterMovement()->BrakingDecelerationWalking = 1000.f;
 
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("UEnemyCombatComponent");
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+}
+
+void AEveEnemyBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	EveAIController = Cast<AEveAIController>(NewController);
+	EveAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	EveAIController->RunBehaviorTree(BehaviorTree);
+	EveAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), false);
+	EveAIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"), CharacterClass != ECharacterClass::Warrior);
+}
+
+void AEveEnemyBase::SetHitReacting(bool bReacting)
+{
+	EveAIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"), bReacting);
 }
 
 void AEveEnemyBase::BeginPlay()
@@ -62,6 +76,8 @@ void AEveEnemyBase::BeginPlay()
 		OnHealthChanged.Broadcast(EveAS->GetHealth());
 		OnMaxHealthChanged.Broadcast(EveAS->GetMaxHealth());
 	}
+
+	Tags.Emplace(ACTOR_TAG_ENEMY);
 }
 
 void AEveEnemyBase::InitAbilityActorInfo()

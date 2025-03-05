@@ -5,7 +5,9 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EveDebugHelper.h"
+#include "AI/EveAIController.h"
 #include "Character/EveCharacter.h"
+#include "Character/EveEnemyBase.h"
 #include "Items/Weapons/EvePlayerWeapon.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -22,7 +24,7 @@ void UPlayerCombatComponent::MeleeAttackTrace(FGameplayEffectSpecHandle DamageSp
 
 	FVector Start = Owner->GetActorLocation();
 	// TODO: melee attack의 범위도 하드코딩 수정
-	FVector End = Start + Owner->GetActorForwardVector() * 100.f;
+	FVector End = Start + Owner->GetActorForwardVector() * 80.f;
 
 	TArray<FHitResult> HitResults;
 	FCollisionShape AttackShape = FCollisionShape::MakeSphere(75.0f);
@@ -67,12 +69,26 @@ void UPlayerCombatComponent::PlayHitReact(ACharacter* TargetCharacter)
 
 	if (UAnimInstance* AnimInstance = TargetCharacter->GetMesh()->GetAnimInstance())
 	{
-		if (AEveCharacterBase* EveCharacter = Cast<AEveCharacterBase>(TargetCharacter))
+		if (AEveEnemyBase* Enemy = Cast<AEveEnemyBase>(TargetCharacter))
 		{
-			if (UAnimMontage* HitReactMontage = EveCharacter->GetHitReactMontage())
+			if (UAnimMontage* HitReactMontage = Enemy->GetHitReactMontage())
 			{
 				AnimInstance->Montage_Play(HitReactMontage);
+
+				// TODO: Hit React 관련 로직 분리 필요
+				Enemy->SetHitReacting(true);
+				FOnMontageEnded EndDelegate;
+				EndDelegate.BindUObject(this, &UPlayerCombatComponent::OnHitReactMontageEnded, Enemy);
+				AnimInstance->Montage_SetEndDelegate(EndDelegate, HitReactMontage);
 			}
 		}
+	}
+}
+
+void UPlayerCombatComponent::OnHitReactMontageEnded(UAnimMontage* Montage, bool bInterrupted, AEveEnemyBase* Enemy)
+{
+	if(Enemy)
+	{
+		Enemy->SetHitReacting(false);
 	}
 }

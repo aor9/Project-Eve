@@ -7,6 +7,7 @@
 #include "Components/PawnCombatComponent.h"
 #include "PlayerCombatComponent.generated.h"
 
+class AEveEnemyBase;
 class UGameplayEffect;
 class AEvePlayerWeapon;
 /**
@@ -28,4 +29,5 @@ public:
 	
 	void PlayCombatCameraShake() const;
 	void PlayHitReact(ACharacter* TargetCharacter);
+	void OnHitReactMontageEnded(UAnimMontage* Montage, bool bInterrupted, AEveEnemyBase* Enemy);
 };
