@@ -53,6 +53,8 @@ void UPlayerCombatComponent::MeleeAttackTrace(FGameplayEffectSpecHandle DamageSp
 
 void UPlayerCombatComponent::PlayCombatCameraShake() const
 {
+	// TODO: CameraShake 분리
+	
 	if (CombatCameraShake)
 	{
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);

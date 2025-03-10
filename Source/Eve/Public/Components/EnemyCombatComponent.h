@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "Components/PawnCombatComponent.h"
 #include "EnemyCombatComponent.generated.h"
 
@@ -14,7 +15,7 @@ class EVE_API UEnemyCombatComponent : public UPawnCombatComponent
 {
 	GENERATED_BODY()
 	
-	
-	
+public:
+	void MeleeAttackTrace(FGameplayEffectSpecHandle DamageSpecHandle);
 	
 };

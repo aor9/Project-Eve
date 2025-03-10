@@ -59,6 +59,8 @@ protected:
 private:
 	float MaxWalkSpeed = 150.f;
 
+	void GiveStartupAbilities() const;
+
 public:
 	FORCEINLINE UEnemyCombatComponent* GetEnemyCombatComponent() const {return EnemyCombatComponent;}
 	

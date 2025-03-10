@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "Eve.h"
+#include "EveDebugHelper.h"
 #include "AbilitySystem/EveAbilitySystemComponent.h"
 #include "AI/EveAIController.h"
 #include "BehaviorTree/BehaviorTree.h"
@@ -52,6 +53,7 @@ void AEveEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
+	GiveStartupAbilities();
 
 	if(UEveUserWidget* EveUserWidget = Cast<UEveUserWidget>(HealthBar->GetUserWidgetObject()))
 	{
@@ -86,4 +88,11 @@ void AEveEnemyBase::InitAbilityActorInfo()
 	Cast<UEveAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
 	InitDefaultAttributes();
+}
+
+void AEveEnemyBase::GiveStartupAbilities() const
+{
+	UEveAbilitySystemComponent* EveASC = CastChecked<UEveAbilitySystemComponent>(AbilitySystemComponent);
+	EveASC->AddEnemyAbilities(StartupAbilities);
+	Debug::Print("Enemy Ability Granted");
 }

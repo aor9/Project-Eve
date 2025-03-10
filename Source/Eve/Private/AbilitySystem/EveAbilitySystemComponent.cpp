@@ -31,6 +31,16 @@ void UEveAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<
 	}
 }
 
+void UEveAbilitySystemComponent::AddEnemyAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
+{
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		GiveAbility(AbilitySpec);
+	}
+}
+
+
 void UEveAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
 	if(!InputTag.IsValid()) return;

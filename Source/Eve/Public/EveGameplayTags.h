@@ -33,4 +33,7 @@ namespace EveGameplayTags
 
 	// ** Enemy
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
+
+	// ** Abilities
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Abilities_Attack);
 };
