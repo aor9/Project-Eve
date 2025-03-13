@@ -19,6 +19,8 @@
 
 #include "EveDebugHelper.h"
 #include "Components/WidgetComponent.h"
+#include "Game/EveGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "UI/Widgets/EveUserWidget.h"
 
 
@@ -126,8 +128,44 @@ void AEveCharacter::InitAbilityActorInfo()
 	}
 
 	InitDefaultAttributes();
+	InitMapEffect();
 
 	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &AEveCharacter::InitStaminaWidget);
+}
+
+// ** 맵 진입시 초기 적용할 Gamepaly Effect 적용 (체온, 배고픔)
+void AEveCharacter::InitMapEffect() const
+{
+	AEveGameModeBase* GameMode = Cast<AEveGameModeBase>(UGameplayStatics::GetGameMode(this));
+	
+	if (GameMode && GameMode->TemperatureEffect && GameMode->HungerEffect)
+	{
+		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
+		FGameplayEffectSpecHandle TempSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameMode->TemperatureEffect, 1.0f, EffectContext);
+		if (TempSpecHandle.IsValid())
+		{
+			FGameplayEffectSpec* TempSpec = TempSpecHandle.Data.Get();
+			if (TempSpec)
+			{
+				FScalableFloat TemperatureEffectMagnitude = GameMode->TemperatureEffectMagnitude;
+				float ColdMagnitude = TemperatureEffectMagnitude.GetValue();
+				TempSpec->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Attributes.Vital.BodyTemperature")), ColdMagnitude);
+				AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*TempSpec);
+			}
+		}
+		
+		FGameplayEffectSpecHandle HungerSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameMode->HungerEffect, 1.0f, EffectContext);
+		if (HungerSpecHandle.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*HungerSpecHandle.Data.Get());
+		}
+
+		FGameplayEffectSpecHandle StaminaSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameMode->StaminaEffect, 1.0f, EffectContext);
+		if (StaminaSpecHandle.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*StaminaSpecHandle.Data.Get());
+		}
+	}
 }
 
 void AEveCharacter::InitStaminaWidget()

@@ -53,6 +53,8 @@ protected:
 private:
 	virtual void InitAbilityActorInfo() override;
 
+	void InitMapEffect() const;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess= "true"))
 	USpringArmComponent* SpringArm;
 

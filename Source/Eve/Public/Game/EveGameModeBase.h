@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ScalableFloat.h"
 #include "GameFramework/GameModeBase.h"
 #include "EveGameModeBase.generated.h"
 
+class UGameplayEffect;
 class UCharacterClassInfo;
 /**
  * 
@@ -18,5 +20,16 @@ class EVE_API AEveGameModeBase : public AGameModeBase
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Character Class Defaults")
 	TObjectPtr<UCharacterClassInfo> CharacterClassInfo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Environment")
+	TSubclassOf<UGameplayEffect> TemperatureEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Environment")
+	TSubclassOf<UGameplayEffect> HungerEffect;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Environment")
+	TSubclassOf<UGameplayEffect> StaminaEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	FScalableFloat TemperatureEffectMagnitude;
 };
