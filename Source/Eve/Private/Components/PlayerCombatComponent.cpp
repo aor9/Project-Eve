@@ -27,7 +27,7 @@ void UPlayerCombatComponent::MeleeAttackTrace(FGameplayEffectSpecHandle DamageSp
 	FVector End = Start + Owner->GetActorForwardVector() * 80.f;
 
 	TArray<FHitResult> HitResults;
-	FCollisionShape AttackShape = FCollisionShape::MakeSphere(75.0f);
+	FCollisionShape AttackShape = FCollisionShape::MakeSphere(55.0f);
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(Owner);
 	
@@ -38,14 +38,25 @@ void UPlayerCombatComponent::MeleeAttackTrace(FGameplayEffectSpecHandle DamageSp
 		PlayCombatCameraShake();
 		for (const FHitResult& Hit : HitResults)
 		{
-			if(ACharacter* TargetCharacter = Cast<ACharacter>(Hit.GetActor()))
+			AEveEnemyBase* TargetEnemy = Cast<AEveEnemyBase>(Hit.GetActor());
+			if(TargetEnemy)
 			{
-				PlayHitReact(TargetCharacter);
+				PlayHitReact(TargetEnemy);
 			}
-			
+
+			// Todo : damage 클래스 분리
 			if(UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Hit.GetActor()))
 			{
-				TargetASC->ApplyGameplayEffectSpecToSelf(*DamageSpecHandle.Data.Get());	
+				TargetASC->ApplyGameplayEffectSpecToSelf(*DamageSpecHandle.Data.Get());
+
+				if (UEveAttributeSet* TargetAttributes = Cast<UEveAttributeSet>(TargetEnemy->GetAttributeSet()))
+				{
+					float CurrentHealth = TargetAttributes->GetHealth();
+					if (CurrentHealth <= 0.f)
+					{
+						TargetEnemy->Die();
+					}
+				}
 			}
 		}
 	}

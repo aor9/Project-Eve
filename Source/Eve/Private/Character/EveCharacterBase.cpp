@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "EveDebugHelper.h"
 #include "AbilitySystem/EveAbilitySystemComponent.h"
+#include "Components/CapsuleComponent.h"
 
 
 AEveCharacterBase::AEveCharacterBase()
@@ -32,6 +33,16 @@ void AEveCharacterBase::BeginPlay()
 
 void AEveCharacterBase::InitAbilityActorInfo()
 {
+}
+
+void AEveCharacterBase::Die()
+{
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AEveCharacterBase::ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const

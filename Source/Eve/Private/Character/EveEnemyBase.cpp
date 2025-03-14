@@ -90,6 +90,12 @@ void AEveEnemyBase::InitAbilityActorInfo()
 	InitDefaultAttributes();
 }
 
+void AEveEnemyBase::Die()
+{
+	SetLifeSpan(5.f);
+	Super::Die();
+}
+
 void AEveEnemyBase::GiveStartupAbilities() const
 {
 	UEveAbilitySystemComponent* EveASC = CastChecked<UEveAbilitySystemComponent>(AbilitySystemComponent);

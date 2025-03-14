@@ -27,6 +27,7 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 
 	void SetHitReacting(bool bReacting);
+	virtual void Die() override;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangeSignature OnHealthChanged;
