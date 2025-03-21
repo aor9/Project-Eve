@@ -92,7 +92,7 @@ void AEveEnemyBase::InitAbilityActorInfo()
 
 void AEveEnemyBase::Die()
 {
-	SetLifeSpan(5.f);
+	SetLifeSpan(15.f);
 	Super::Die();
 }
 
@@ -100,5 +100,4 @@ void AEveEnemyBase::GiveStartupAbilities() const
 {
 	UEveAbilitySystemComponent* EveASC = CastChecked<UEveAbilitySystemComponent>(AbilitySystemComponent);
 	EveASC->AddEnemyAbilities(StartupAbilities);
-	Debug::Print("Enemy Ability Granted");
 }

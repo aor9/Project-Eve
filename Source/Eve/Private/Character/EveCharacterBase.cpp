@@ -67,5 +67,4 @@ void AEveCharacterBase::AddCharacterAbilities() const
 
 	UEveAbilitySystemComponent* EveASC = CastChecked<UEveAbilitySystemComponent>(AbilitySystemComponent);
 	EveASC->AddCharacterAbilities(StartupAbilities);
-	Debug::Print("Character Abilities Granted");
 }

@@ -130,7 +130,6 @@ void AEvePlayerController::GetMouseNormal()
 
 void AEvePlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-	Debug::Print(InputTag.ToString());
 }
 
 void AEvePlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
