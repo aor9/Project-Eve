@@ -7,21 +7,20 @@
 
 #include "InteractionInterface.generated.h"
 
-// This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(NotBlueprintable)
 class UInteractionInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class EVE_API IInteractionInterface
 {
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
+	virtual void OnClick() = 0;
 	
-	
+	UFUNCTION(BlueprintCallable)
+	virtual void SetClickable(bool bActive) = 0;
 };

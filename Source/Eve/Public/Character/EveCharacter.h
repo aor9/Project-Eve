@@ -7,6 +7,7 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "EveCharacter.generated.h"
 
+class USphereComponent;
 class UDataAsset_InputConfig;
 class UNiagaraComponent;
 class UNiagaraSystem;
@@ -42,6 +43,12 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangeSignature OnMaxStaminaChanged;
+
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 protected:
 	virtual void BeginPlay() override;
@@ -60,6 +67,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess= "true"))
 	UCameraComponent* Camera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess="true"))
+	USphereComponent* InteractionSphere;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess= "true", DisplayPriority = 1))
 	UPlayerCombatComponent* PlayerCombatComponent;

@@ -18,8 +18,10 @@
 #include "Components/PlayerCombatComponent.h"
 
 #include "EveDebugHelper.h"
+#include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Game/EveGameModeBase.h"
+#include "Interfaces/InteractionInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/Widgets/EveUserWidget.h"
 
@@ -35,6 +37,15 @@ AEveCharacter::AEveCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 	Camera->bUsePawnControlRotation = false;
+
+	InteractionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionSphere"));
+	InteractionSphere->InitSphereRadius(200.f);
+	InteractionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	InteractionSphere->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	InteractionSphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Overlap);
+	InteractionSphere->SetupAttachment(RootComponent);
+	InteractionSphere->OnComponentBeginOverlap.AddDynamic(this, &AEveCharacter::OnBeginOverlap);
+	InteractionSphere->OnComponentEndOverlap.AddDynamic(this, &AEveCharacter::OnEndOverlap);
 
 	PlayerCombatComponent = CreateDefaultSubobject<UPlayerCombatComponent>(TEXT("PlayerCombatComponent"));
 
@@ -192,5 +203,29 @@ void AEveCharacter::InitStaminaWidget()
 
 		OnStaminaChanged.Broadcast(EveAS->GetStamina());
 		OnMaxStaminaChanged.Broadcast(EveAS->GetMaxStamina());
+	}
+}
+
+void AEveCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OtherActor->Implements<UInteractionInterface>())
+	{
+		IInteractionInterface* InteractionActor = Cast<IInteractionInterface>(OtherActor);
+		if (InteractionActor)
+		{
+			InteractionActor->SetClickable(true);
+		}
+	}
+}
+
+void AEveCharacter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if(OtherActor->Implements<UInteractionInterface>())
+	{
+		IInteractionInterface* InteractionActor = Cast<IInteractionInterface>(OtherActor);
+		if (InteractionActor)
+		{
+			InteractionActor->SetClickable(false);
+		}
 	}
 }
