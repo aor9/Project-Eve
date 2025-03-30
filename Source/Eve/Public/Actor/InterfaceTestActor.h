@@ -16,14 +16,22 @@ public:
 	AInterfaceTestActor();
 
 protected:
+	UPROPERTY(EditAnywhere, Category = "TestActor")
+	UStaticMeshComponent* Mesh;
+	
 	virtual void BeginPlay() override;
+	
+	virtual void Interact() override;
+	
+	virtual void BeginFocus() override;
+	
+	virtual void EndFocus() override;
 
-	UFUNCTION()
-	virtual void OnClick() override;
-	UFUNCTION()
-	virtual void SetClickable(bool bClickable) override;
+	virtual void BeginInteract() override;
+
+	virtual void EndInteract() override;
 
 private:
-	bool bIsClickable = false;
+
 	
 };

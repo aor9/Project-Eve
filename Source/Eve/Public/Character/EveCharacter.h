@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/EveCharacterBase.h"
+#include "Interfaces/InteractionInterface.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "EveCharacter.generated.h"
 
@@ -43,6 +44,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangeSignature OnMaxStaminaChanged;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Interaction")
+	TSet<AActor*> TargetInteractions;
 
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

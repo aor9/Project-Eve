@@ -23,6 +23,7 @@ namespace EveGameplayTags
 
 	// ** Player State
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_State_NoMove);
+	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_State_Interaction);
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_State_Rolling);
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_State_Stunned);
 	EVE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_State_Bleeding);

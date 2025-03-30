@@ -44,8 +44,18 @@ private:
 	
 	void Input_Move(const FInputActionValue& InputValue);
 
+	void Input_Lmb(const FInputActionValue& InputValue);
+
 	FVector2D CachedMouseNormal;
+	
 	void GetMouseNormal();
+
+	void DetectInteractableUnderCursor();
+
+	bool bInteract = false;
+
+	UPROPERTY()
+	AActor* CurrentInteractable = nullptr;
 
 	// ** Rolling
 	FVector RollingDirection;

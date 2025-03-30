@@ -213,7 +213,8 @@ void AEveCharacter::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 		IInteractionInterface* InteractionActor = Cast<IInteractionInterface>(OtherActor);
 		if (InteractionActor)
 		{
-			InteractionActor->SetClickable(true);
+			InteractionActor->BeginFocus();
+			TargetInteractions.Add(OtherActor);
 		}
 	}
 }
@@ -225,7 +226,8 @@ void AEveCharacter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		IInteractionInterface* InteractionActor = Cast<IInteractionInterface>(OtherActor);
 		if (InteractionActor)
 		{
-			InteractionActor->SetClickable(false);
+			InteractionActor->EndFocus();
+			TargetInteractions.Remove(OtherActor);
 		}
 	}
 }

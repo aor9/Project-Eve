@@ -7,7 +7,47 @@
 
 #include "InteractionInterface.generated.h"
 
-UINTERFACE(NotBlueprintable)
+UENUM()
+enum EInteractableType : uint8
+{
+	Pickup UMETA(DisplayName = "Pickup"),
+	NonPlayerCharacter UMETA(DisplayName = "NonPlayerCharacter"),
+	Device UMETA(DisplayName = "Device"),
+	Toggle UMETA(DisplayName = "Toggle"),
+	Container UMETA(DisplayName = "Container")
+};
+
+USTRUCT()
+struct FInteractableData
+{
+	GENERATED_BODY()
+
+	FInteractableData() :
+	InteractableType(EInteractableType::Pickup), Name(FText::GetEmpty()),
+	Action(FText::GetEmpty()), Quantity(0), InteractionDuration(0.f)
+	{
+		
+	};
+
+	UPROPERTY(EditInstanceOnly)
+	TEnumAsByte<EInteractableType> InteractableType;
+
+	UPROPERTY(EditInstanceOnly)
+	FText Name;
+
+	UPROPERTY(EditInstanceOnly)
+	FText Action;
+
+	// used only for pickups
+	UPROPERTY(EditInstanceOnly)
+	int8 Quantity;
+
+	// used for things like doors, that requires an interaction timer
+	UPROPERTY(EditInstanceOnly)
+	float InteractionDuration;
+};
+
+UINTERFACE(MinimalAPI)
 class UInteractionInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -18,9 +58,11 @@ class EVE_API IInteractionInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable)
-	virtual void OnClick() = 0;
-	
-	UFUNCTION(BlueprintCallable)
-	virtual void SetClickable(bool bActive) = 0;
+	virtual void BeginFocus() = 0;
+	virtual void EndFocus() = 0;
+	virtual void BeginInteract() = 0;
+	virtual void EndInteract() = 0;
+	virtual void Interact() = 0;
+
+	FInteractableData InteractableData;
 };
