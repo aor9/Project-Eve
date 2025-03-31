@@ -8,6 +8,7 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "EveCharacter.generated.h"
 
+class AEveHUD;
 class USphereComponent;
 class UDataAsset_InputConfig;
 class UNiagaraComponent;
@@ -55,11 +56,14 @@ public:
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 protected:
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> StaminaBar;
+
+	UPROPERTY()
+	AEveHUD* EveHUD;
+	
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 private:
 	virtual void InitAbilityActorInfo() override;

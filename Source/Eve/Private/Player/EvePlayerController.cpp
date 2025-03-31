@@ -105,7 +105,7 @@ void AEvePlayerController::Input_Lmb(const FInputActionValue& InputValue)
 	if(bInteract && CurrentInteractable)
 	{
 		IInteractionInterface* InteractionActor = Cast<IInteractionInterface>(CurrentInteractable);
-		InteractionActor->BeginInteract();
+		InteractionActor->Interact(EveCharacter);
 	}
 }
 

@@ -56,7 +56,6 @@ AEveCharacter::AEveCharacter()
 void AEveCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	NiagaraSnowComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
 		SnowingEffect,
 		SpringArm,
@@ -132,7 +131,8 @@ void AEveCharacter::InitAbilityActorInfo()
 
 	if(AEvePlayerController* EvePlayerController = Cast<AEvePlayerController>(GetController()))
 	{
-		if(AEveHUD* EveHUD = Cast<AEveHUD>(EvePlayerController->GetHUD()))
+		EveHUD = Cast<AEveHUD>(EvePlayerController->GetHUD());
+		if(EveHUD)
 		{
 			EveHUD->InitOverlay(EvePlayerController, EvePlayerState, AbilitySystemComponent, AttributeSet);
 		}
