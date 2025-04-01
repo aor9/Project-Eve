@@ -62,8 +62,8 @@ class EVE_API IInteractionInterface
 public:
 	virtual void BeginFocus() = 0;
 	virtual void EndFocus() = 0;
-	virtual void BeginInteract() = 0;
-	virtual void EndInteract() = 0;
+	virtual void BeginInteract();
+	virtual void EndInteract();
 	virtual void Interact(AEveCharacter* EveCharacter) = 0;
 
 	FInteractableData InteractableData;

@@ -31,12 +31,14 @@ void AInterfaceTestActor::BeginPlay()
 
 void AInterfaceTestActor::Interact(AEveCharacter* Character)
 {
-	Debug::Print(TEXT("Interact"));
+	if(Character)
+	{
+		Debug::Print(TEXT("Interact"));	
+	}
 }
 
 void AInterfaceTestActor::BeginFocus()
 {
-	Debug::Print(TEXT("범위 내에 Interaction 가능한 Actor가 들어옴."));
 	InteractionWidgetComponent->SetVisibility(true);
 
 	UInteractionWidget* Widget = Cast<UInteractionWidget>(InteractionWidgetComponent->GetUserWidgetObject());
@@ -48,7 +50,6 @@ void AInterfaceTestActor::BeginFocus()
 
 void AInterfaceTestActor::EndFocus()
 {
-	Debug::Print(TEXT("Interaction 가능한 Actor가 범위 밖으로 나감."));
 	InteractionWidgetComponent->SetVisibility(false);
 }
 
