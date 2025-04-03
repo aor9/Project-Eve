@@ -7,6 +7,7 @@
 #include "ItemBase.generated.h"
 
 class AEveCharacter;
+class UInventoryComponent;
 /**
  * 
  */
@@ -19,8 +20,28 @@ class EVE_API UItemBase : public UObject
 public:
 	UItemBase();
 
-	// UPROPERTY()
-	// UInventoryComponent* OwningInventory;
+	UFUNCTION(Category = "Item")
+	UItemBase* CreateItemCopy() const;
+
+	UFUNCTION(Category = "Item")
+	void SetQuantity(const int32 NewQuantity);
+
+	UFUNCTION(Category = "Item")
+	virtual void Use(AEveCharacter* Character);
+
+	UFUNCTION(Category = "Item")
+	FORCEINLINE float GetItemStackWeight() const { return Quantity * ItemNumericData.Weight; }
+
+	UFUNCTION(Category = "Item")
+	FORCEINLINE float GetItemSingleWeight() const { return ItemNumericData.Weight; }
+
+	UFUNCTION(Category = "Item")
+	FORCEINLINE bool IsFullItemStack() const { return Quantity == ItemNumericData.MaxStackSize; }
+
+	void ResetItemFlags();
+
+	UPROPERTY()
+	UInventoryComponent* OwningInventory;
 	
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	FName ID;
@@ -46,23 +67,8 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	FItemAssetData ItemAssetData;
 
-	UFUNCTION(Category = "Item")
-	UItemBase* CreateItemCopy() const;
-
-	UFUNCTION(Category = "Item")
-	void SetQuantity(const int32 NewQuantity);
-
-	UFUNCTION(Category = "Item")
-	virtual void Use(AEveCharacter* Character);
-
-	UFUNCTION(Category = "Item")
-	FORCEINLINE float GetItemStackWeight() const { return Quantity * ItemNumericData.Weight; }
-
-	UFUNCTION(Category = "Item")
-	FORCEINLINE float GetItemSingleWeight() const { return ItemNumericData.Weight; }
-
-	UFUNCTION(Category = "Item")
-	FORCEINLINE bool IsFullItemStack() const { return Quantity == ItemNumericData.MaxStackSize; }
+	bool bIsCopy;
+	bool bIsPickup;
 
 protected:
 	bool operator==(const FName& OtherID) const

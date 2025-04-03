@@ -4,8 +4,10 @@
 #include "Actor/Pickup.h"
 
 #include "EveDebugHelper.h"
+#include "Components/InventoryComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Items/ItemBase.h"
+#include "Player/EvePlayerController.h"
 #include "UI/Widgets/InteractionWidget.h"
 
 
@@ -13,7 +15,7 @@ class UInteractionWidget;
 
 APickup::APickup()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = false;	
 
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>("Pickup Mesh");
 	SetRootComponent(PickupMesh);
@@ -22,7 +24,6 @@ APickup::APickup()
 	InteractionWidgetComponent->SetupAttachment(RootComponent);
 	InteractionWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
 	InteractionWidgetComponent->SetVisibility(false);
-
 	InteractionWidgetComponent->SetRelativeLocation(FVector(0.f, 0.f, 100.f));
 }
 
@@ -105,11 +106,38 @@ void APickup::TakePickup(const AEveCharacter* Taker)
 	{
 		if(ItemReferecne)
 		{
-			// if(UInventoryComponent* PlayerInventory = Taker->GetInventory())
+			if(UInventoryComponent* PlayerInventory = Taker->GetInventory())
+			{
+				const FItemAddResult AddResult = PlayerInventory->HandleAddItem(ItemReferecne);
 
-			// try to add item to player inventory
-			// based on result of the add operation
-			// adjust or destory the pickup
+				switch (AddResult.OperationResult)
+				{
+				case EItemAddResult::IAR_NoItemAdded:
+					break;
+				case EItemAddResult::IAR_PartialAmountItemAdded:
+					{
+						UpdateInteractableData();
+						AEvePlayerController* PC = Cast<AEvePlayerController>(Taker->GetController());
+						PC->UpdateInteractionWidget();
+						break;	
+					}
+				case EItemAddResult::IAR_AllItemAdded:
+					Destroy();
+					break;
+				default:
+					break;
+				}
+
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *AddResult.ResultMessage.ToString());
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Player inventory component is null!!"));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Pickup internal item reference was null!"));
 		}
 	}
 }

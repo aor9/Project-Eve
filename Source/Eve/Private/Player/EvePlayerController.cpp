@@ -14,6 +14,7 @@
 #include "DataAssets/Input/EveInputData.h"
 #include "Input/EveInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "UI/HUD/EveHUD.h"
 
 
 AEvePlayerController::AEvePlayerController(const FObjectInitializer& ObjectInitializer)
@@ -102,10 +103,12 @@ void AEvePlayerController::Input_Move(const FInputActionValue& InputValue)
 
 void AEvePlayerController::Input_Lmb(const FInputActionValue& InputValue)
 {
-	if(bInteract && CurrentInteractable)
+	if(CurrentInteractable && bInteract)
 	{
-		IInteractionInterface* InteractionActor = Cast<IInteractionInterface>(CurrentInteractable);
-		InteractionActor->Interact(EveCharacter);
+		if(IInteractionInterface* InteractionActor = Cast<IInteractionInterface>(CurrentInteractable))
+		{
+			InteractionActor->Interact(EveCharacter);
+		}
 	}
 }
 
@@ -165,12 +168,32 @@ void AEvePlayerController::DetectInteractableUnderCursor()
 			else
 			{
 				bInteract = false;
-				FGameplayTag InteractionTag = FGameplayTag::RequestGameplayTag(FName("Player.State.Interaction"));
 				CurrentInteractable = nullptr;
-				if (InitASC()->HasMatchingGameplayTag(InteractionTag))
-				{
-					InitASC()->RemoveLooseGameplayTag(InteractionTag);
-				}
+				//todo : interaction tag 를 적당한 타이밍에 지워야함.
+				RemoveInteractionTagSafely();
+			}
+		}
+	}
+}
+
+void AEvePlayerController::RemoveInteractionTagSafely()
+{
+	FGameplayTag InteractionTag = FGameplayTag::RequestGameplayTag(FName("Player.State.Interaction"));
+	if (InitASC()->HasMatchingGameplayTag(InteractionTag))
+	{
+		InitASC()->RemoveLooseGameplayTag(InteractionTag);
+	}
+}
+
+void AEvePlayerController::UpdateInteractionWidget() const
+{
+	if(IsValid(CurrentInteractable))
+	{
+		if (AEveHUD* HUD = Cast<AEveHUD>(GetHUD()))
+		{
+			if (IInteractionInterface* Target = Cast<IInteractionInterface>(CurrentInteractable))
+			{
+				HUD->UpdateInteractionWidget(&Target->InteractableData);
 			}
 		}
 	}

@@ -18,6 +18,7 @@
 #include "Components/PlayerCombatComponent.h"
 
 #include "EveDebugHelper.h"
+#include "Components/InventoryComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Game/EveGameModeBase.h"
@@ -48,6 +49,10 @@ AEveCharacter::AEveCharacter()
 	InteractionSphere->OnComponentEndOverlap.AddDynamic(this, &AEveCharacter::OnEndOverlap);
 
 	PlayerCombatComponent = CreateDefaultSubobject<UPlayerCombatComponent>(TEXT("PlayerCombatComponent"));
+
+	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
+	PlayerInventory->SetSlotsCapacity(20);
+	PlayerInventory->SetWeightCapacity(50.0f);
 
 	StaminaBar = CreateDefaultSubobject<UWidgetComponent>("StaminaBar");
 	StaminaBar->SetupAttachment(Camera);

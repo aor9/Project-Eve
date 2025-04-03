@@ -24,6 +24,7 @@ class EVE_API AEvePlayerController : public APlayerController
 public:
 	AEvePlayerController(const FObjectInitializer& ObjectInitializer);
 	void StartRolling(FVector Direction, float RollingPower);
+	void UpdateInteractionWidget() const;
 
 	FVector LastMoveDirection;
 	
@@ -33,6 +34,18 @@ protected:
 	virtual void SetupInputComponent() override;
 
 private:
+	UEveAbilitySystemComponent* InitASC();
+	
+	void Input_Move(const FInputActionValue& InputValue);
+	void Input_Lmb(const FInputActionValue& InputValue);
+	void GetMouseNormal();
+	void DetectInteractableUnderCursor();
+	void RemoveInteractionTagSafely();
+	
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+	
 	UPROPERTY()
 	APawn* ControlledPawn;
 
@@ -42,36 +55,22 @@ private:
 	UPROPERTY()
 	AEveCharacter* EveCharacter;
 	
-	void Input_Move(const FInputActionValue& InputValue);
-
-	void Input_Lmb(const FInputActionValue& InputValue);
-
-	FVector2D CachedMouseNormal;
 	
-	void GetMouseNormal();
-
-	void DetectInteractableUnderCursor();
-
-	bool bInteract = false;
-
-	UPROPERTY()
-	AActor* CurrentInteractable = nullptr;
-
-	// ** Rolling
-	FVector RollingDirection;
-	float RollingPower;
-	
-	void AbilityInputTagPressed(FGameplayTag InputTag);
-	void AbilityInputTagReleased(FGameplayTag InputTag);
-	void AbilityInputTagHeld(FGameplayTag InputTag);
-
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UEveInputData> InputData;
 
 	UPROPERTY()
 	TObjectPtr<UEveAbilitySystemComponent> EveAbilitySystemComponent;
 
-	UEveAbilitySystemComponent* InitASC();
+	UPROPERTY()
+	AActor* CurrentInteractable = nullptr;
+
+	FVector2D CachedMouseNormal;
+	
+	bool bInteract = false;
+	
+	FVector RollingDirection;
+	float RollingPower;
 
 public:
 	UEveBaseAnimInstance* GetEveBaseAnimInstance() const { return EveAnimInstance; }

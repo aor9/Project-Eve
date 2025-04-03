@@ -19,6 +19,7 @@ class UInputComponent;
 class AController;
 class UPlayerCombatComponent;
 class UWidgetComponent;
+class UInventoryComponent;
 /**
  * 
  */
@@ -34,6 +35,13 @@ public:
 	
 	void RotateToMouseDirection(const FVector2D& MouseNormal);
 
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	FORCEINLINE UInventoryComponent* GetInventory() const { return PlayerInventory; };
+
 	UPROPERTY(EditAnywhere, Category = "Snowing")
 	UNiagaraSystem* SnowingEffect;
 
@@ -48,27 +56,26 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, Category = "Interaction")
 	TSet<AActor*> TargetInteractions;
-
-	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 protected:
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+
+	UPROPERTY(VisibleAnywhere, Category= "Character Inventory")
+	UInventoryComponent* PlayerInventory;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> StaminaBar;
 
 	UPROPERTY()
 	AEveHUD* EveHUD;
-	
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
 
 private:
 	virtual void InitAbilityActorInfo() override;
 
 	void InitMapEffect() const;
+	
+	void InitStaminaWidget();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess= "true"))
 	USpringArmComponent* SpringArm;
@@ -84,8 +91,6 @@ private:
 
 	float YawRotation;
 	FRotator NewRotation;
-
-	void InitStaminaWidget();
 
 public:
 	FORCEINLINE UPlayerCombatComponent* GetPlayerCombatComponent() const { return PlayerCombatComponent; }

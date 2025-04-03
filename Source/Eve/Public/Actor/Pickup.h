@@ -16,7 +16,6 @@ class EVE_API APickup : public AActor, public IInteractionInterface
 	GENERATED_BODY()
 	
 public:
-	
 	APickup();
 
 	void InitPickup(const int32 InQuantity);
@@ -30,6 +29,12 @@ public:
 	virtual void Interact(AEveCharacter* EveCharacter) override;
 
 protected:
+	virtual void BeginPlay() override;
+
+	void UpdateInteractableData();
+	
+	void TakePickup(const AEveCharacter* Taker);
+	
 	UPROPERTY(VisibleAnywhere, Category= "Pickup | Components")
 	UStaticMeshComponent* PickupMesh;
 
@@ -50,12 +55,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> InteractionWidgetComponent;
-	
-	virtual void BeginPlay() override;
-
-	void UpdateInteractableData();
-	
-	void TakePickup(const AEveCharacter* Taker);
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
