@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "InputActionValue.h"
 #include "GameFramework/PlayerController.h"
 #include "EvePlayerController.generated.h"
 
@@ -38,6 +39,7 @@ private:
 	
 	void Input_Move(const FInputActionValue& InputValue);
 	void Input_Lmb(const FInputActionValue& InputValue);
+	void Input_Inventory(const FInputActionValue& InputValue);
 	void GetMouseNormal();
 	void DetectInteractableUnderCursor();
 	void RemoveInteractionTagSafely();

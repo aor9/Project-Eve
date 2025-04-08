@@ -13,6 +13,7 @@ namespace EveGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Input_RMB, "Input.RMB");
 	UE_DEFINE_GAMEPLAY_TAG(Input_Q, "Input.Q");
 	UE_DEFINE_GAMEPLAY_TAG(Input_E, "Input.E");
+	UE_DEFINE_GAMEPLAY_TAG(Input_I, "Input.I");
 	
 	// ** Player
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack_Light_Sword, "Player.Ability.Attack.Light.Sword");

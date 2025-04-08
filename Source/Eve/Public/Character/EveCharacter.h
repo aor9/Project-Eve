@@ -8,6 +8,8 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "EveCharacter.generated.h"
 
+class APickup;
+class UItemBase;
 class AEveHUD;
 class USphereComponent;
 class UDataAsset_InputConfig;
@@ -40,6 +42,8 @@ public:
 	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	void DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop);
+	
 	FORCEINLINE UInventoryComponent* GetInventory() const { return PlayerInventory; };
 
 	UPROPERTY(EditAnywhere, Category = "Snowing")
@@ -56,6 +60,9 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, Category = "Interaction")
 	TSet<AActor*> TargetInteractions;
+
+	UPROPERTY(EditDefaultsOnly, Category= "Character Inventory")
+	TSubclassOf<APickup> PickupClass;
 	
 protected:
 	virtual void BeginPlay() override;

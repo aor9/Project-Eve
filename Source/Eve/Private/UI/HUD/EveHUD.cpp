@@ -82,6 +82,24 @@ void AEveHUD::HideMenu()
 	}
 }
 
+void AEveHUD::ToggleMenu()
+{
+	if(bIsMenuVisible)
+	{
+		HideMenu();
+
+		const FInputModeGameOnly InputMode;
+		GetOwningPlayerController()->SetInputMode(InputMode);
+	}
+	else
+	{
+		DisplayMenu();
+
+		const FInputModeGameAndUI InputMode;
+		GetOwningPlayerController()->SetInputMode(InputMode);
+	}
+}
+
 void AEveHUD::ShowInteractionWidget() const
 {
 	if(InteractionWidget)

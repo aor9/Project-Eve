@@ -63,6 +63,11 @@ void APickup::InitDrop(UItemBase* ItemToDrop, const int32 InQuantity)
 	PickupMesh->SetStaticMesh(ItemToDrop->ItemAssetData.Mesh);
 	 
 	UpdateInteractableData();
+	
+	if(UInteractionWidget* Widget = Cast<UInteractionWidget>(InteractionWidgetComponent->GetUserWidgetObject()))
+	{
+		Widget->UpdateWidget(&InteractableData);
+	}
 }
 
 void APickup::UpdateInteractableData()
@@ -79,8 +84,7 @@ void APickup::BeginFocus()
 {
 	InteractionWidgetComponent->SetVisibility(true);
 
-	UInteractionWidget* Widget = Cast<UInteractionWidget>(InteractionWidgetComponent->GetUserWidgetObject());
-	if(Widget)
+	if(UInteractionWidget* Widget = Cast<UInteractionWidget>(InteractionWidgetComponent->GetUserWidgetObject()))
 	{
 		Widget->UpdateWidget(&InteractableData);
 	}
@@ -122,8 +126,10 @@ void APickup::TakePickup(const AEveCharacter* Taker)
 						break;	
 					}
 				case EItemAddResult::IAR_AllItemAdded:
-					Destroy();
-					break;
+					{
+						Destroy();
+						break;	
+					}
 				default:
 					break;
 				}

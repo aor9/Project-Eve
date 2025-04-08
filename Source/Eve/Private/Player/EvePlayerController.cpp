@@ -77,6 +77,9 @@ void AEvePlayerController::SetupInputComponent()
 		auto LmbAction = InputData->FindInputActionByTag(EveGameplayTags::Input_LMB);
 		EveInputComponent->BindAction(LmbAction, ETriggerEvent::Started, this, &ThisClass::Input_Lmb);
 
+		auto InventoryAction = InputData->FindInputActionByTag(EveGameplayTags::Input_I);
+		EveInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &ThisClass::Input_Inventory);
+
 		EveInputComponent->BindAbilityActions(InputData, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 	}
 }
@@ -109,6 +112,14 @@ void AEvePlayerController::Input_Lmb(const FInputActionValue& InputValue)
 		{
 			InteractionActor->Interact(EveCharacter);
 		}
+	}
+}
+
+void AEvePlayerController::Input_Inventory(const FInputActionValue& InputValue)
+{
+	if (AEveHUD* HUD = Cast<AEveHUD>(GetHUD()))
+	{
+		HUD->ToggleMenu();
 	}
 }
 

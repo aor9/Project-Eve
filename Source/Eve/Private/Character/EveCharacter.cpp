@@ -18,6 +18,7 @@
 #include "Components/PlayerCombatComponent.h"
 
 #include "EveDebugHelper.h"
+#include "Actor/Pickup.h"
 #include "Components/InventoryComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
@@ -51,7 +52,7 @@ AEveCharacter::AEveCharacter()
 	PlayerCombatComponent = CreateDefaultSubobject<UPlayerCombatComponent>(TEXT("PlayerCombatComponent"));
 
 	PlayerInventory = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
-	PlayerInventory->SetSlotsCapacity(20);
+	PlayerInventory->SetSlotsCapacity(50);
 	PlayerInventory->SetWeightCapacity(50.0f);
 
 	StaminaBar = CreateDefaultSubobject<UWidgetComponent>("StaminaBar");
@@ -234,5 +235,47 @@ void AEveCharacter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* Ot
 			InteractionActor->EndFocus();
 			TargetInteractions.Remove(OtherActor);
 		}
+	}
+}
+
+void AEveCharacter::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop)
+{
+	if(PlayerInventory->FindMatchingItem(ItemToDrop))
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner =this;
+		SpawnParams.bNoFail = true;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		// Line Trace로 지면 위치 구하기
+		FVector Start = GetActorLocation() + (GetActorForwardVector() * 100.f);
+		FVector End = Start - FVector(0, 0, 1000.f);
+
+		FHitResult HitResult;
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this);
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(
+			HitResult,
+			Start,
+			End,
+			ECC_Visibility,
+			QueryParams
+		);
+		
+		if(bHit && PickupClass)
+		{
+			const FVector GroundLocation = HitResult.ImpactPoint + FVector(0.f, 0.f, 10.f);
+			const FTransform SpawnTransform(GetActorRotation(),	GroundLocation);
+			
+			const int32 RemovedQuantity = PlayerInventory->RemoveAmountOfItem(ItemToDrop, QuantityToDrop);
+
+			APickup* Pickup = GetWorld()->SpawnActor<APickup>(PickupClass, SpawnTransform, SpawnParams);
+			Pickup->InitDrop(ItemToDrop, QuantityToDrop);
+		}
+	}
+	else
+	{
+		Debug::Print(TEXT("Item to Drop was somehow null"));
 	}
 }

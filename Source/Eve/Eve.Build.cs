@@ -13,7 +13,8 @@ public class Eve : ModuleRules
 			"Eve",
 		});
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayAbilities", "GameplayTags", "GameplayTasks", "Niagara", "AIModule" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", 
+			"GameplayAbilities", "GameplayTags", "GameplayTasks", "Niagara", "AIModule", "SlateCore", "Slate", "UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "AIModule" });
 

@@ -4,6 +4,8 @@
 #include "UI/MainMenuWidget.h"
 
 #include "Character/EveCharacter.h"
+#include "Items/ItemBase.h"
+#include "UI/ItemDragDropOperation.h"
 
 
 void UMainMenuWidget::NativeOnInitialized()
@@ -21,7 +23,13 @@ void UMainMenuWidget::NativeConstruct()
 
 bool UMainMenuWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
-	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
+	const UItemDragDropOperation* ItemDragDrop = Cast<UItemDragDropOperation>(InOperation);
 
+	if(EveCharacter && ItemDragDrop->SourceItem)
+	{
+		EveCharacter->DropItem(ItemDragDrop->SourceItem, ItemDragDrop->SourceItem->Quantity);
+		return true;
+	}
 	
+	return false;
 }
