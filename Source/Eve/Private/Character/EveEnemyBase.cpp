@@ -92,6 +92,7 @@ void AEveEnemyBase::InitAbilityActorInfo()
 
 void AEveEnemyBase::Die()
 {
+	AbilitySystemComponent->ClearAllAbilities();
 	SetLifeSpan(15.f);
 	Super::Die();
 }
