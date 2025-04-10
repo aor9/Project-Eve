@@ -49,6 +49,9 @@ void UInteractionWidget::UpdateWidget(const FInteractableData* InteractableData)
 		break;
 	
 	case Toggle:
+		KeyPressText->SetVisibility(ESlateVisibility::Collapsed);
+		InteractionProgressBar->SetVisibility(ESlateVisibility::Collapsed);
+		QuantityText->SetVisibility(ESlateVisibility::Collapsed);
 		break;
 	
 	case Container:

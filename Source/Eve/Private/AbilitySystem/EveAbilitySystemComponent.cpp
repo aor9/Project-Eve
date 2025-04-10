@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/EveAbilitySystemComponent.h"
 
+#include "EveGameplayTags.h"
 #include "AbilitySystem/Abilities/EveGameplayAbility.h"
 
 
@@ -37,6 +38,32 @@ void UEveAbilitySystemComponent::AddEnemyAbilities(const TArray<TSubclassOf<UGam
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
 		GiveAbility(AbilitySpec);
+	}
+}
+
+void UEveAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
+{
+	if (!InputTag.IsValid()) return;
+	FScopedAbilityListLock ActiveScopeLoc(*this);
+	
+	for (FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
+		{
+			AbilitySpecInputPressed(AbilitySpec);
+			if (AbilitySpec.IsActive())
+			{
+				InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, AbilitySpec.Handle, AbilitySpec.ActivationInfo.GetActivationPredictionKey());
+			}
+
+			if (InputTag == EveGameplayTags::Input_LMB)
+			{
+				if (!AbilitySpec.IsActive())
+				{
+					TryActivateAbility(AbilitySpec.Handle);
+				}
+			}
+		}
 	}
 }
 
