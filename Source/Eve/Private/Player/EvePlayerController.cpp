@@ -180,7 +180,6 @@ void AEvePlayerController::DetectInteractableUnderCursor()
 			{
 				bInteract = false;
 				CurrentInteractable = nullptr;
-				//todo : interaction tag 를 적당한 타이밍에 지워야함.
 				RemoveInteractionTagSafely();
 			}
 		}
@@ -212,17 +211,19 @@ void AEvePlayerController::UpdateInteractionWidget() const
 
 void AEvePlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
+	if (InitASC() && bInteract) return;
+	InitASC()->AbilityInputTagPressed(InputTag);
 }
 
 void AEvePlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	if(InitASC() == nullptr)	return;
+	if(InitASC() == nullptr && bInteract)	return;
 	InitASC()->AbilityInputTagReleased(InputTag);
 }
 
 void AEvePlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	if(InitASC() == nullptr)	return;
+	if(InitASC() == nullptr && bInteract)	return;
 	InitASC()->AbilityInputTagHeld(InputTag);
 }
 

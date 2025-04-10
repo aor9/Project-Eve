@@ -99,7 +99,6 @@ void APickup::Interact(AEveCharacter* EveCharacter)
 {
 	if(EveCharacter)
 	{
-		Debug::Print(TEXT("Interact"));
 		TakePickup(EveCharacter);
 	}
 }
