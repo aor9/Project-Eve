@@ -6,10 +6,12 @@
 #include "Blueprint/UserWidget.h"
 #include "DialogueWidget.generated.h"
 
+class AEveHUD;
 class UButton;
 struct FDialogueData;
 class UTextBlock;
 class UImage;
+class UMainMenuWidget;
 
 /**
  * 
@@ -20,14 +22,22 @@ class EVE_API UDialogueWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void UpdateWidget(const FDialogueData* DialogueData) const;
+	void UpdateWidget(FDialogueData* DialogueData);
+
+	UPROPERTY()
+	TObjectPtr<AEveHUD> OwnerHUD;
 
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
 
+	void ProcessDialogueOption(int32 OptionIndex);
+
 	UFUNCTION()
 	void OnNextBtnClicked();
+	
+	UFUNCTION()
+	void OnEndBtnClicked();
 
 	UFUNCTION()
 	void OnFirstOptionBtnClicked();
@@ -42,6 +52,9 @@ protected:
 	void OnNextBtnHovered();
 
 	UFUNCTION()
+	void OnEndBtnHovered();
+
+	UFUNCTION()
 	void OnFirstOptionBtnHovered();
 
 	UFUNCTION()
@@ -52,6 +65,9 @@ protected:
 
 	UFUNCTION()
 	void OnNextBtnUnhovered();
+	
+	UFUNCTION()
+	void OnEndBtnUnhovered();
 
 	UFUNCTION()
 	void OnFirstOptionBtnUnhovered();
@@ -74,6 +90,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category="DialogueWidget")
 	UButton* NextBtn;
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category="DialogueWidget")
+	UButton* EndBtn;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category="DialogueWidget")
 	UButton* FirstOptionBtn;
@@ -86,6 +105,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category="DialogueWidget")
 	UTextBlock* NextOptionText;
+	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category="DialogueWidget")
+	UTextBlock* EndOptionText;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category="DialogueWidget")
 	UTextBlock* FirstOptionText;
@@ -95,6 +117,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category="DialogueWidget")
 	UTextBlock* ThirdOptionText;
-	
+
+private:
+	FDialogueData* InstanceDialogueData;
 	
 };

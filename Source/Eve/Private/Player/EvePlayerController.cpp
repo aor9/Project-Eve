@@ -119,7 +119,7 @@ void AEvePlayerController::Input_Inventory(const FInputActionValue& InputValue)
 {
 	if (AEveHUD* HUD = Cast<AEveHUD>(GetHUD()))
 	{
-		HUD->ToggleMenu();
+		HUD->ToggleMainMenu(EMenuType::Inventory);
 	}
 }
 

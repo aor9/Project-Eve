@@ -5,8 +5,10 @@
 
 #include "UI/MainMenuWidget.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
+#include "UI/Widgets/DialogueWidget.h"
 #include "UI/Widgets/EveUserWidget.h"
 #include "UI/Widgets/InteractionWidget.h"
+#include "UI/Widgets/InventoryWidget.h"
 
 
 AEveHUD::AEveHUD()
@@ -23,6 +25,7 @@ void AEveHUD::BeginPlay()
 		MainMenuWidget = CreateWidget<UMainMenuWidget>(GetWorld(), MainMenuWidgetClass);
 		MainMenuWidget->AddToViewport(static_cast<int32>(EWidgetLayer::MainMenu));
 		MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
+		MainMenuWidget->DialogueWidget->OwnerHUD = this;
 	}
 
 	if(InteractionWidgetClass)
@@ -64,33 +67,61 @@ void AEveHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySyste
 	Widget->AddToViewport();
 }
 
-void AEveHUD::DisplayMenu()
+void AEveHUD::DisplayMainMenu(EMenuType MenuType)
 {
 	if(MainMenuWidget)
 	{
 		bIsMenuVisible = true;
 		MainMenuWidget->SetVisibility(ESlateVisibility::Visible);
+		switch (MenuType)
+		{
+		case EMenuType::MainMenu:
+			break;
+		case EMenuType::Inventory:
+			MainMenuWidget->InventoryWidget->SetVisibility(ESlateVisibility::Visible);
+			MainMenuWidget->DialogueWidget->SetVisibility(ESlateVisibility::Collapsed);
+			break;
+		case EMenuType::Dialogue:
+			MainMenuWidget->InventoryWidget->SetVisibility(ESlateVisibility::Collapsed);
+			MainMenuWidget->DialogueWidget->SetVisibility(ESlateVisibility::Visible);
+			break;
+		default:
+			break;
+		}
 	}
 }
 
-void AEveHUD::HideMenu()
+void AEveHUD::HideMainMenu(EMenuType MenuType)
 {
 	if(MainMenuWidget)
 	{
 		bIsMenuVisible = false;
 		MainMenuWidget->SetVisibility(ESlateVisibility::Collapsed);
+		switch (MenuType)
+		{
+		case EMenuType::MainMenu:
+			break;
+		case EMenuType::Inventory:
+			MainMenuWidget->InventoryWidget->SetVisibility(ESlateVisibility::Collapsed);
+			break;
+		case EMenuType::Dialogue:
+			MainMenuWidget->DialogueWidget->SetVisibility(ESlateVisibility::Collapsed);
+			break;
+		default:
+			break;
+		}
 	}
 }
 
-void AEveHUD::ToggleMenu()
+void AEveHUD::ToggleMainMenu(EMenuType MenuType)
 {
 	if(bIsMenuVisible)
 	{
-		HideMenu();
+		HideMainMenu(MenuType);
 	}
 	else
 	{
-		DisplayMenu();
+		DisplayMainMenu(MenuType);
 	}
 }
 

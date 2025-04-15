@@ -29,6 +29,15 @@ enum class EWidgetLayer : uint8
 	MainMenu       = 50
 };
 
+UENUM(BlueprintType)
+enum class EMenuType : uint8
+{
+	MainMenu,
+	Inventory,
+	Dialogue,
+	Shop
+};
+
 
 UCLASS()
 class EVE_API AEveHUD : public AHUD
@@ -36,6 +45,20 @@ class EVE_API AEveHUD : public AHUD
 	GENERATED_BODY()
 
 public:
+	AEveHUD();
+
+	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WidgetControllerParams);
+	
+	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
+	
+	void DisplayMainMenu(EMenuType MenuType);
+	void HideMainMenu(EMenuType MenuType);
+	void ToggleMainMenu(EMenuType MenuType);
+
+	void ShowInteractionWidget() const;
+	void HideInteractionWidget() const;
+	void UpdateInteractionWidget(const FInteractableData* InteractableData) const;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Widgets")
 	TSubclassOf<UMainMenuWidget> MainMenuWidgetClass;
 
@@ -47,28 +70,16 @@ public:
 
 	bool bIsMenuVisible;
 
-	AEveHUD();
-
-	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WidgetControllerParams);
-	
-	void InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS);
-
-	void DisplayMenu();
-	void HideMenu();
-	void ToggleMenu();
-
-	void ShowInteractionWidget() const;
-	void HideInteractionWidget() const;
-	void UpdateInteractionWidget(const FInteractableData* InteractableData) const;
+	FORCEINLINE UMainMenuWidget* GetMainMenuWidget() const { return MainMenuWidget; }
 	
 protected:
+	virtual void BeginPlay() override;
+	
 	UPROPERTY()
 	UMainMenuWidget* MainMenuWidget;
 
 	UPROPERTY()
 	UInteractionWidget* InteractionWidget;
-
-	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(EditAnywhere)

@@ -27,8 +27,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "NPC")
 	TObjectPtr<UWidgetComponent> InteractionWidgetComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category= "NPC")
-	TObjectPtr<UDialogueComponent> DialogueComponent;
+	UPROPERTY(VisibleAnywhere, Category= "NPC")
+	TObjectPtr<UDialogueComponent> NPCDialogue;
 
 	UPROPERTY(EditAnywhere, Category= "NPC")
 	FName NPCName;

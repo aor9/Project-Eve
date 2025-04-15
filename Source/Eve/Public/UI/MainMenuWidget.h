@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "MainMenuWidget.generated.h"
 
+class UDialogueWidget;
+class UInventoryWidget;
 class AEveCharacter;
 /**
  * 
@@ -18,6 +20,12 @@ class EVE_API UMainMenuWidget : public UUserWidget
 public:
 	UPROPERTY()
 	AEveCharacter* EveCharacter;
+
+	UPROPERTY(meta = (BindWidget))
+	UInventoryWidget* InventoryWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	UDialogueWidget* DialogueWidget;
 	
 protected:
 	virtual void NativeOnInitialized() override;

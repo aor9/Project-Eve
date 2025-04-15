@@ -12,6 +12,22 @@ class UCharacterClassInfo;
 /**
  * 
  */
+
+USTRUCT(Blueprintable)
+struct FEnvironmentStruct
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	FScalableFloat TemperatureEffectMagnitude;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	float WindStrength;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
+	float SnowRate;
+};
+
 UCLASS()
 class EVE_API AEveGameModeBase : public AGameModeBase
 {
@@ -30,6 +46,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Environment")
 	TSubclassOf<UGameplayEffect> StaminaEffect;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Environment")
-	FScalableFloat TemperatureEffectMagnitude;
+	UPROPERTY(EditDefaultsOnly, Category = "Environment")
+	FEnvironmentStruct EnvironmentStruct;
 };

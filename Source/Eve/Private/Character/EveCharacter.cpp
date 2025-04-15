@@ -74,9 +74,9 @@ void AEveCharacter::BeginPlay()
 	
 	if(NiagaraSnowComponent)
 	{
-		// TODO : 날씨를 조절하는 클래스에서 바람 세기, 눈이 얼마나 내리는지 등 가져오기
-		NiagaraSnowComponent->SetFloatParameter(FName("WindPower"), -150.f);
-		NiagaraSnowComponent->SetFloatParameter(FName("SnowRate"), 450.f);	
+		AEveGameModeBase* GameMode = Cast<AEveGameModeBase>(UGameplayStatics::GetGameMode(this));
+		NiagaraSnowComponent->SetFloatParameter(FName("WindPower"), GameMode->EnvironmentStruct.WindStrength);
+		NiagaraSnowComponent->SetFloatParameter(FName("SnowRate"), GameMode->EnvironmentStruct.SnowRate);
 	}
 
 	Tags.Emplace(ACTOR_TAG_PLAYER);
@@ -164,7 +164,7 @@ void AEveCharacter::InitMapEffect() const
 			FGameplayEffectSpec* TempSpec = TempSpecHandle.Data.Get();
 			if (TempSpec)
 			{
-				FScalableFloat TemperatureEffectMagnitude = GameMode->TemperatureEffectMagnitude;
+				FScalableFloat TemperatureEffectMagnitude = GameMode->EnvironmentStruct.TemperatureEffectMagnitude;
 				float ColdMagnitude = TemperatureEffectMagnitude.GetValue();
 				TempSpec->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Attributes.Vital.BodyTemperature")), ColdMagnitude);
 				AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*TempSpec);

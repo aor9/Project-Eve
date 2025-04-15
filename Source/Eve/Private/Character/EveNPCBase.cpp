@@ -4,6 +4,7 @@
 #include "Character/EveNPCBase.h"
 
 #include "EveDebugHelper.h"
+#include "Components/DialogueComponent.h"
 #include "Components/WidgetComponent.h"
 #include "UI/Widgets/InteractionWidget.h"
 
@@ -19,6 +20,7 @@ AEveNPCBase::AEveNPCBase()
 	InteractionWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
 	InteractionWidgetComponent->SetVisibility(false);
 	InteractionWidgetComponent->SetRelativeLocation(FVector(0.f, 0.f, 100.f));
+	NPCDialogue = CreateDefaultSubobject<UDialogueComponent>(TEXT("NPC Dialogue Component"));
 }
 
 void AEveNPCBase::BeginPlay()
@@ -52,5 +54,5 @@ void AEveNPCBase::EndFocus()
 
 void AEveNPCBase::Interact(AEveCharacter* EveCharacter)
 {
-	// todo: Dialogue UI 생성
+	NPCDialogue->StartDialogue();
 }
