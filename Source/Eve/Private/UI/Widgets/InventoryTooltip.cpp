@@ -69,4 +69,8 @@ void UInventoryTooltip::NativeConstruct()
 		const FString WeightInfo =
 			{"Weight: " + FString::SanitizeFloat(ItemBeingHovered->GetItemStackWeight()) };
 	}
+	else
+	{
+		this->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }

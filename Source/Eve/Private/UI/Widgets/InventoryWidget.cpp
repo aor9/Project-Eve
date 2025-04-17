@@ -49,12 +49,29 @@ void UInventoryWidget::RefreshInventory()
 	if(InventoryReference && InventorySlotClass)
 	{
 		InventoryPanel->ClearChildren();
+		
+		// for(TObjectPtr<UItemBase> const& InventoryItem : InventoryReference->GetInventoryContents())
+		// {
+		// 	UInventoryItemSlots* ItemSlot = CreateWidget<UInventoryItemSlots>(this, InventorySlotClass);
+		// 	ItemSlot->SetItemReference(InventoryItem);
+		//
+		// 	InventoryPanel->AddChildToWrapBox(ItemSlot);
+		// }
 
-		for(TObjectPtr<UItemBase> const& InventoryItem : InventoryReference->GetInventoryContents())
+		TArray<TObjectPtr<UItemBase>> InventoryItems = InventoryReference->GetInventoryContents();
+		for(int i = 0; i < InventoryReference->GetSlotsCapacity(); i++)
 		{
 			UInventoryItemSlots* ItemSlot = CreateWidget<UInventoryItemSlots>(this, InventorySlotClass);
-			ItemSlot->SetItemReference(InventoryItem);
 
+			if (InventoryItems.IsValidIndex(i) && InventoryItems[i] != nullptr)
+			{
+				ItemSlot->SetItemReference(InventoryItems[i]);
+			}
+			else
+			{
+				ItemSlot->SetItemEmpty();
+			}
+			
 			InventoryPanel->AddChildToWrapBox(ItemSlot);
 		}
 		

@@ -8,6 +8,7 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "EveEnemyBase.generated.h"
 
+class UMotionWarpingComponent;
 class UWidgetComponent;
 class UEnemyCombatComponent;
 class UBehaviorTree;
@@ -38,6 +39,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
+	virtual void InitDefaultAttributes() const override;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	UEnemyCombatComponent* EnemyCombatComponent;
@@ -56,6 +58,9 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<AEveAIController> EveAIController;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Motion Warping")
+	TObjectPtr<UMotionWarpingComponent> MotionWarpingComponent;
 
 private:
 	float MaxWalkSpeed = 150.f;

@@ -22,7 +22,8 @@ class EVE_API UInventoryItemSlots : public UUserWidget
 	
 public:
 	FORCEINLINE void SetItemReference(UItemBase* ItemIn) { ItemReference = ItemIn; };
-	FORCEINLINE UItemBase* GetItemReference() const { return  ItemReference; }
+	FORCEINLINE void SetItemEmpty() { ItemReference = nullptr; };
+	FORCEINLINE UItemBase* GetItemReference() const { return  ItemReference; };
 
 protected:
 	virtual void NativeOnInitialized() override;

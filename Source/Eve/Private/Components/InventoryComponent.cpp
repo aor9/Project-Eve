@@ -15,7 +15,8 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	OnInventoryUpdated.Broadcast();
 }
 
 UItemBase* UInventoryComponent::FindMatchingItem(UItemBase* TargetItem) const

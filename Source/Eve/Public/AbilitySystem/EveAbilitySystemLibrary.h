@@ -18,7 +18,6 @@ class EVE_API UEveAbilitySystemLibrary : public UBlueprintFunctionLibrary
 	
 	
 public:
-
 	UFUNCTION(BlueprintCallable, Category = "EveAbilitySystemLibrary")
 	static void InitializeDefaultAttributes(const UObject* WorldContextObject, ECharacterClass CharacterClass, float Level, UAbilitySystemComponent* ASC);
 	

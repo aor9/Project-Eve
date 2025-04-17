@@ -45,10 +45,6 @@ void UEveAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, f
 	{
 		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHunger());
 	}
-	if(Attribute == GetBodyTemperatureAttribute())
-	{
-		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxBodyTemperature());
-	}
 }
 
 void UEveAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -65,6 +61,10 @@ void UEveAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbac
 	if(Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+	}
+	if(Data.EvaluatedData.Attribute == GetBodyTemperatureAttribute())
+	{
+		SetBodyTemperature(FMath::Clamp(GetBodyTemperature(), 0.f, GetMaxBodyTemperature()));
 	}
 }
 

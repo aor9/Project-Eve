@@ -1,4 +1,4 @@
-// Copyright aor9
+	// Copyright aor9
 
 
 #include "UI/Widgets/InventoryItemSlots.h"
@@ -40,6 +40,11 @@ void UInventoryItemSlots::NativeConstruct()
 		{
 			ItemQuantity->SetVisibility(ESlateVisibility::Collapsed);
 		}
+	}
+	else
+	{
+		ItemIcon->SetVisibility(ESlateVisibility::Collapsed);
+		ItemQuantity->SetVisibility(ESlateVisibility::Collapsed);
 	}
 }
 

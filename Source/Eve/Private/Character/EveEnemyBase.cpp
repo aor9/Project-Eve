@@ -7,6 +7,7 @@
 #include "Eve.h"
 #include "EveDebugHelper.h"
 #include "AbilitySystem/EveAbilitySystemComponent.h"
+#include "AbilitySystem/EveAbilitySystemLibrary.h"
 #include "AI/EveAIController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -14,7 +15,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widgets/EveUserWidget.h"
-
+#include "MotionWarpingComponent.h"
 
 AEveEnemyBase::AEveEnemyBase()
 {
@@ -31,6 +32,8 @@ AEveEnemyBase::AEveEnemyBase()
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>("MotionWarpingComponent");
 }
 
 void AEveEnemyBase::PossessedBy(AController* NewController)
@@ -90,9 +93,21 @@ void AEveEnemyBase::InitAbilityActorInfo()
 	InitDefaultAttributes();
 }
 
+void AEveEnemyBase::InitDefaultAttributes() const
+{
+	UEveAbilitySystemLibrary::InitializeDefaultAttributes(this, CharacterClass, Level, AbilitySystemComponent);
+}
+
 void AEveEnemyBase::Die()
 {
 	AbilitySystemComponent->ClearAllAbilities();
+
+	USkeletalMeshComponent* EnemyMesh = GetMesh();
+	EnemyMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	EnemyMesh->SetCollisionObjectType(ECC_Pawn);
+	EnemyMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
+	EnemyMesh->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	
 	SetLifeSpan(15.f);
 	Super::Die();
 }
