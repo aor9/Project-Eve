@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/Abilities/EvePlayerRolling.h"
 
+#include "Eve.h"
 #include "EveDebugHelper.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Character/EveCharacter.h"
@@ -63,6 +64,7 @@ void UEvePlayerRolling::OnRollingComplete()
 	if(!EveCharacter || !ASC)	return;
 	
 	EveCharacter->GetCapsuleComponent()->SetCollisionProfileName(FName("Pawn"));
+	EveCharacter->GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	EveCharacter->GetAbilitySystemComponent()->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Player.State.Rolling")));
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 }

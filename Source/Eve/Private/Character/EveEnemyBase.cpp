@@ -112,6 +112,17 @@ void AEveEnemyBase::Die()
 	Super::Die();
 }
 
+void AEveEnemyBase::SetCombatTarget(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* AEveEnemyBase::GetCombatTarget() const
+{
+	return CombatTarget;
+}
+
+
 void AEveEnemyBase::GiveStartupAbilities() const
 {
 	UEveAbilitySystemComponent* EveASC = CastChecked<UEveAbilitySystemComponent>(AbilitySystemComponent);

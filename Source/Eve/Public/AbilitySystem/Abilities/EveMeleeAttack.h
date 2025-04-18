@@ -15,6 +15,4 @@ class EVE_API UEveMeleeAttack : public UEveGameplayAbility
 	GENERATED_BODY()
 	
 	
-	
-	
 };

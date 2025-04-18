@@ -16,7 +16,7 @@ class AEveAIController;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class EVE_API AEveEnemyBase : public AEveCharacterBase
 {
 	GENERATED_BODY()
@@ -29,6 +29,15 @@ public:
 
 	void SetHitReacting(bool bReacting);
 	virtual void Die() override;
+
+	UFUNCTION(BlueprintCallable)
+	void SetCombatTarget(AActor* InCombatTarget);
+
+	UFUNCTION(BlueprintCallable)
+	AActor* GetCombatTarget() const;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChangeSignature OnHealthChanged;

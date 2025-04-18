@@ -22,11 +22,11 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 	UAnimMontage* GetHitReactMontage();
+	virtual void Die();
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo();
-	virtual void Die();
 
 
 	UPROPERTY()
