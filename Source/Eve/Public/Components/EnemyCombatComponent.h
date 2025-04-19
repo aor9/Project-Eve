@@ -16,6 +16,6 @@ class EVE_API UEnemyCombatComponent : public UPawnCombatComponent
 	GENERATED_BODY()
 	
 public:
-	void MeleeAttackTrace(FGameplayEffectSpecHandle DamageSpecHandle);
+	void MeleeAttackTrace(FGameplayEffectSpecHandle DamageSpecHandle, bool bIsBoss);
 	
 };

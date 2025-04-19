@@ -19,13 +19,11 @@ void UMeleeHitCheck::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase*
 
 		if (AEveCharacter* PlayerCharacter = Cast<AEveCharacter>(Character))
 		{
-			UE_LOG(LogTemp, Log, TEXT("Melee Attack by Player"));
 			PlayerCharacter->GetPlayerCombatComponent()->MeleeAttackTrace(SpecHandle);
 		}
 		else if (AEveEnemyBase* EnemyCharacter = Cast<AEveEnemyBase>(Character))
 		{
-			UE_LOG(LogTemp, Log, TEXT("Melee Attack by Enemy"));
-			EnemyCharacter->GetEnemyCombatComponent()->MeleeAttackTrace(SpecHandle);
+			EnemyCharacter->GetEnemyCombatComponent()->MeleeAttackTrace(SpecHandle, bIsBoss);
 		}
 	}
 }
