@@ -32,6 +32,7 @@ namespace EveGameplayTags
 
 	// ** Enemy
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_Weapon, "Enemy.Weapon");
+	UE_DEFINE_GAMEPLAY_TAG(Enemy_Ability, "Enemy.Ability");
 
 	// ** Abilities
 	UE_DEFINE_GAMEPLAY_TAG(Abilities_Attack, "Abilities.Attack");

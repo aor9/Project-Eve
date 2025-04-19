@@ -1,0 +1,50 @@
+[
+  {
+    "Name": "Attributes.Primary.Strength",
+    "1": 20,
+    "5": 30,
+    "10": 40,
+    "15": 50,
+    "20": 60
+  },
+  {
+    "Name": "Attributes.Primary.Dexterity",
+    "1": 20,
+    "5": 30,
+    "10": 40,
+    "15": 50,
+    "20": 60
+  },
+  {
+    "Name": "Attributes.Primary.Endurance",
+    "1": 0,
+    "5": 0,
+    "10": 0,
+    "15": 0,
+    "20": 0
+  },
+  {
+    "Name": "Attributes.Primary.Luck",
+    "1": 0,
+    "5": 0,
+    "10": 0,
+    "15": 0,
+    "20": 0
+  },
+  {
+    "Name": "Attributes.Primary.Willpower",
+    "1": 0,
+    "5": 0,
+    "10": 0,
+    "15": 0,
+    "20": 0
+  },
+  {
+    "Name": "Attributes.Primary.MaxHealth",
+    "1": 400,
+    "5": 450,
+    "10": 500,
+    "15": 550,
+    "20": 600
+  }
+]

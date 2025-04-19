@@ -44,22 +44,22 @@ void AEveProjectile::BeginPlay()
 	SetLifeSpan(LifeSpan);
 	SetReplicateMovement(true);
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &AEveProjectile::OnSphereOverlap);
-	Sphere->OnComponentHit.AddDynamic(this, &AEveProjectile::OnSphereHit);
-
 
 	LoopingSoundComponent = UGameplayStatics::SpawnSoundAttached(LoopingSound, GetRootComponent());
 }
 
 void AEveProjectile::OnHit()
 {
+	bHit = true;
+	
 	UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation(), FRotator::ZeroRotator);
+	UE_LOG(LogTemp, Warning, TEXT("ImpactSound Played!"));
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
 	if (LoopingSoundComponent)
 	{
 		LoopingSoundComponent->Stop();
 		LoopingSoundComponent->DestroyComponent();
 	}
-	bHit = true;
 }
 
 void AEveProjectile::Destroyed()
@@ -95,16 +95,6 @@ void AEveProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, A
 		}
 	}
 	
-	Destroy();
-}
-
-void AEveProjectile::OnSphereHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (!bHit)
-	{
-		OnHit(); // 시각/사운드 이펙트 실행
-	}
-
 	Destroy();
 }
 

@@ -19,6 +19,10 @@ void UEveAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1); 
 		if(const UEveGameplayAbility* EveAbility = Cast<UEveGameplayAbility>(AbilitySpec.Ability))
 		{
+			/* 
+			 * todo: activation policy 설정 고려해보기
+			 * 현재는 startInputTag 가 없으면 passive 능력으로 생각하고 바로 한번 실행해주는 형식
+			 */
 			if(EveAbility->StartInputTag != FGameplayTag::EmptyTag)
 			{
 				AbilitySpec.DynamicAbilityTags.AddTag(EveAbility->StartInputTag);
@@ -29,15 +33,6 @@ void UEveAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<
 				GiveAbilityAndActivateOnce(AbilitySpec);
 			}
 		}
-	}
-}
-
-void UEveAbilitySystemComponent::AddEnemyAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities)
-{
-	for (const TSubclassOf<UGameplayAbility> AbilityClass : StartupAbilities)
-	{
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-		GiveAbility(AbilitySpec);
 	}
 }
 

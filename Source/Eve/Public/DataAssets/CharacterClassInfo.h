@@ -13,7 +13,8 @@ enum class ECharacterClass : uint8
 {
 	Wizard,
 	Warrior,
-	Ranger
+	Ranger,
+	Giant,
 };
 
 USTRUCT(BlueprintType)

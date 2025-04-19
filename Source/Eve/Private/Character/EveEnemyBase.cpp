@@ -16,6 +16,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UI/Widgets/EveUserWidget.h"
 #include "MotionWarpingComponent.h"
+#include "Components/CapsuleComponent.h"
 
 AEveEnemyBase::AEveEnemyBase()
 {
@@ -101,8 +102,9 @@ void AEveEnemyBase::InitDefaultAttributes() const
 void AEveEnemyBase::Die()
 {
 	AbilitySystemComponent->ClearAllAbilities();
-
+	
 	USkeletalMeshComponent* EnemyMesh = GetMesh();
+
 	EnemyMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	EnemyMesh->SetCollisionObjectType(ECC_Pawn);
 	EnemyMesh->SetCollisionResponseToAllChannels(ECR_Ignore);
@@ -126,5 +128,5 @@ AActor* AEveEnemyBase::GetCombatTarget() const
 void AEveEnemyBase::GiveStartupAbilities() const
 {
 	UEveAbilitySystemComponent* EveASC = CastChecked<UEveAbilitySystemComponent>(AbilitySystemComponent);
-	EveASC->AddEnemyAbilities(StartupAbilities);
+	EveASC->AddCharacterAbilities(StartupAbilities);
 }

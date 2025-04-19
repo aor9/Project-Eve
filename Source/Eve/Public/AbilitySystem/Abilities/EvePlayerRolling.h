@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystem/Abilities/EvePlayerGameplayAbility.h"
-#include "Components/TimelineComponent.h"
 #include "EvePlayerRolling.generated.h"
 
 /**
@@ -16,7 +15,8 @@ class EVE_API UEvePlayerRolling : public UEvePlayerGameplayAbility
 	GENERATED_BODY()
 
 public:
-	float RollingPower = 500.f;
+	UPROPERTY(EditAnywhere)
+	float RollingPower = 300.f;
 
 protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
